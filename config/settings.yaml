@@ -1,0 +1,61 @@
+# ============================================================
+# Telecom Operational Intelligence – Master Configuration
+# ============================================================
+
+project:
+  name: "telecom-intelligence"
+  version: "0.1.0"
+  description: "GraphRAG-based Operational Intelligence for Telecoms"
+
+# ------ Phase 1: Synthetic Data Generation ------------------
+data_generation:
+  seed: 42
+  topology:
+    model: "barabasi_albert"       # Barabási–Albert preferential attachment
+    num_nodes: 500
+    attachment_edges: 3            # m parameter for BA model
+  ontology:
+    layers:
+      - physical    # Routers, switches, fibre links
+      - logical     # VLANs, VPNs, tunnels
+      - service     # VoLTE, IPTV, 5G slices
+      - business    # SLAs, customers, revenue streams
+  chaos:
+    fault_probability: 0.05
+    fault_types:
+      - link_down
+      - node_overload
+      - latency_spike
+      - packet_loss
+  export:
+    formats:
+      - csv
+      - json
+    output_dir: "data/raw"
+
+# ------ Phase 2: Neo4j ETL Pipeline ------------------------
+neo4j:
+  uri: "bolt://localhost:7687"
+  user: "neo4j"
+  password: "changeme"
+  database: "telecom"
+
+# ------ Phase 3: LangGraph Agent ----------------------------
+agent:
+  llm:
+    provider: "openai"
+    model: "gpt-4o"
+    temperature: 0.0
+  cypher:
+    max_retries: 3
+    self_correct: true
+
+# ------ Phase 4: RAGAS Evaluation ---------------------------
+evaluation:
+  oracle: "bfs"                    # Breadth-First Search deterministic oracle
+  metrics:
+    - faithfulness
+    - answer_relevancy
+    - context_precision
+    - context_recall
+  num_test_queries: 50
