@@ -64,17 +64,14 @@ class TestTopologyBuilderInit:
 class TestTopologyBuilderBuild:
     """Graph construction (will pass once build() is implemented)."""
 
-    @pytest.mark.skip(reason="build() not yet implemented")
     def test_build_returns_graph(self, builder: TopologyBuilder) -> None:
         graph = builder.build()
         assert isinstance(graph, nx.Graph)
 
-    @pytest.mark.skip(reason="build() not yet implemented")
     def test_build_node_count(self, builder: TopologyBuilder) -> None:
         graph = builder.build()
         assert graph.number_of_nodes() == builder.num_nodes
 
-    @pytest.mark.skip(reason="build() not yet implemented")
     def test_build_is_deterministic(self, default_config: dict) -> None:
         """Two builders with the same seed should produce identical graphs."""
         g1 = TopologyBuilder(default_config).build()
@@ -93,7 +90,6 @@ class TestTopologyBuilderGetGraph:
 class TestTopologyBuilderSummary:
     """summary() output shape (will pass once implemented)."""
 
-    @pytest.mark.skip(reason="summary() not yet implemented")
     def test_summary_keys(self, builder: TopologyBuilder) -> None:
         builder.build()
         stats = builder.summary()
