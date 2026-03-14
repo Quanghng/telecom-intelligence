@@ -44,7 +44,19 @@ class TopologyBuilder:
         nx.Graph
             The constructed scale-free graph with raw (un-enriched) nodes.
         """
-        raise NotImplementedError
+        self.graph = nx.barabasi_albert_graph(
+            n=self.num_nodes,
+            m=self.attachment_edges,
+            seed=self.seed,
+        )
+
+        for node in self.graph.nodes:
+            self.graph.nodes[node]["layer"] = "physical"
+
+        for u, v in self.graph.edges:
+            self.graph.edges[u, v]["layer"] = "physical"
+
+        return self.graph
 
     def get_graph(self) -> nx.Graph:
         """Return the most recently built graph.
@@ -72,4 +84,13 @@ class TopologyBuilder:
             Keys: ``num_nodes``, ``num_edges``, ``avg_degree``,
             ``density``, ``is_connected``.
         """
-        raise NotImplementedError
+        graph = self.get_graph()
+        num_nodes: int = graph.number_of_nodes()
+        num_edges: int = graph.number_of_edges()
+        return {
+            "num_nodes": num_nodes,
+            "num_edges": num_edges,
+            "avg_degree": (2 * num_edges) / num_nodes if num_nodes > 0 else 0.0,
+            "density": nx.density(graph),
+            "is_connected": nx.is_connected(graph),
+        }
