@@ -16,6 +16,7 @@ Faults are injected probabilistically according to
 
 from __future__ import annotations
 
+import random
 from typing import Any, Dict, List
 
 import networkx as nx
@@ -35,6 +36,8 @@ class ChaosMonkey:
         self.fault_probability: float = chaos_cfg.get("fault_probability", 0.05)
         self.fault_types: List[str] = chaos_cfg.get("fault_types", [])
         self.seed: int = config.get("data_generation", {}).get("seed", 42)
+        self._rng: random.Random = random.Random(self.seed)
+        self.fault_report: Dict[str, int] = {ft: 0 for ft in self.fault_types}
 
     # ------------------------------------------------------------------
     # Public API
@@ -56,7 +59,42 @@ class ChaosMonkey:
         nx.Graph
             The same graph instance with fault attributes injected.
         """
-        raise NotImplementedError
+        if not self.fault_types:
+            return graph
+
+        edge_fault_map: Dict[str, Any] = {
+            "link_down": self._inject_link_down,
+            "latency_spike": self._inject_latency_spike,
+            "packet_loss": self._inject_packet_loss,
+        }
+        node_fault_map: Dict[str, Any] = {
+            "node_overload": self._inject_node_overload,
+        }
+
+        edge_fault_types: List[str] = [
+            ft for ft in self.fault_types if ft in edge_fault_map
+        ]
+        node_fault_types: List[str] = [
+            ft for ft in self.fault_types if ft in node_fault_map
+        ]
+
+        # Inject faults on physical-layer edges
+        for u, v, data in graph.edges(data=True):
+            if data.get("layer") != "physical":
+                continue
+            if self._rng.random() < self.fault_probability and edge_fault_types:
+                fault: str = self._rng.choice(edge_fault_types)
+                edge_fault_map[fault](graph, u, v)
+
+        # Inject faults on physical-layer nodes
+        for node, data in graph.nodes(data=True):
+            if data.get("layer") != "physical":
+                continue
+            if self._rng.random() < self.fault_probability and node_fault_types:
+                fault = self._rng.choice(node_fault_types)
+                node_fault_map[fault](graph, node)
+
+        return graph
 
     def get_fault_report(self, graph: nx.Graph) -> Dict[str, Any]:
         """Summarise all injected faults.
@@ -71,7 +109,7 @@ class ChaosMonkey:
         Dict[str, Any]
             Counts and details per fault type.
         """
-        raise NotImplementedError
+        return self.fault_report
 
     # ------------------------------------------------------------------
     # Fault-type handlers
@@ -87,7 +125,8 @@ class ChaosMonkey:
         u, v : int
             Edge endpoints.
         """
-        raise NotImplementedError
+        graph.edges[u, v]["status"] = "down"
+        self.fault_report["link_down"] += 1
 
     def _inject_node_overload(self, graph: nx.Graph, node: int) -> None:
         """Simulate CPU / memory overload on *node*.
@@ -99,7 +138,8 @@ class ChaosMonkey:
         node : int
             Node identifier.
         """
-        raise NotImplementedError
+        graph.nodes[node]["cpu_utilization"] = round(self._rng.uniform(95.0, 100.0), 2)
+        self.fault_report["node_overload"] += 1
 
     def _inject_latency_spike(self, graph: nx.Graph, u: int, v: int) -> None:
         """Inflate latency on edge (u, v).
@@ -111,7 +151,9 @@ class ChaosMonkey:
         u, v : int
             Edge endpoints.
         """
-        raise NotImplementedError
+        current: float = graph.edges[u, v].get("latency_ms", 1.0)
+        graph.edges[u, v]["latency_ms"] = round(current * self._rng.uniform(5.0, 10.0), 2)
+        self.fault_report["latency_spike"] += 1
 
     def _inject_packet_loss(self, graph: nx.Graph, u: int, v: int) -> None:
         """Assign packet-loss percentage to edge (u, v).
@@ -123,4 +165,5 @@ class ChaosMonkey:
         u, v : int
             Edge endpoints.
         """
-        raise NotImplementedError
+        graph.edges[u, v]["packet_loss_pct"] = round(self._rng.uniform(5.0, 20.0), 2)
+        self.fault_report["packet_loss"] += 1

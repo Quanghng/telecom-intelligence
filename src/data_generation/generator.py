@@ -56,7 +56,39 @@ class SandboxOrchestrator:
         3. Inject stochastic faults.
         4. Export the enriched graph to CSV / JSON.
         """
-        raise NotImplementedError
+        # 1. Build topology
+        graph = self.topology_builder.build()
+
+        # 2. Enrich with ontology layers
+        graph = self.ontology_mapper.map(graph)
+
+        # 3. Inject faults
+        graph = self.chaos_monkey.inject(graph)
+
+        # 4. Export to CSV / JSON
+        export_paths = self.data_exporter.export(graph)
+
+        # 5. Print summary
+        summary = self.topology_builder.summary()
+        fault_report = self.chaos_monkey.get_fault_report(graph)
+
+        print("=" * 60)
+        print("  Telecom Sandbox – Generation Complete")
+        print("=" * 60)
+        print(f"  Nodes          : {summary['num_nodes']}")
+        print(f"  Edges          : {summary['num_edges']}")
+        print(f"  Avg Degree     : {summary['avg_degree']:.2f}")
+        print(f"  Density        : {summary['density']:.6f}")
+        print(f"  Connected      : {summary['is_connected']}")
+        print("-" * 60)
+        print("  Fault Report:")
+        for fault_type, count in fault_report.items():
+            print(f"    {fault_type:<20s}: {count}")
+        print("-" * 60)
+        print("  Exported Files:")
+        for path in export_paths:
+            print(f"    → {path}")
+        print("=" * 60)
 
     # ------------------------------------------------------------------
     # Internal helpers
