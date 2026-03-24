@@ -214,3 +214,7 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Neo4j Docker volumes (local development)
+data/neo4j_data/
+data/neo4j_logs/

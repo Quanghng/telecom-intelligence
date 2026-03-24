@@ -1,0 +1,33 @@
+# =============================================================
+# Telecom GraphRAG – Local Neo4j Development Environment
+# =============================================================
+# Spin up with:   docker compose up -d
+# Tear down with: docker compose down
+# Browser UI:     http://localhost:7474
+# Bolt endpoint:  bolt://localhost:7687  (user: neo4j / changeme)
+# =============================================================
+services:
+  neo4j:
+    image: neo4j:latest
+    container_name: telecom-graphrag-db
+    restart: unless-stopped
+
+    ports:
+      - "7474:7474"   # Neo4j Browser (HTTP)
+      - "7687:7687"   # Bolt protocol (Python driver)
+
+    environment:
+      # ── Authentication ───────────────────────────────────────
+      # Must match config/settings.yaml and the Neo4jSettings
+      # fallback defaults in config/settings.py.
+      NEO4J_AUTH: neo4j/changeme
+
+      # ── Memory limits ───────────────────────────────────────
+      # Cap page-cache and heap so the container doesn't consume
+      # all available host memory during local development.
+      NEO4J_server_memory_pagecache_size: 1G
+      NEO4J_server_memory_heap_max__size: 1G
+
+    volumes:
+      - ./data/neo4j_data:/data    # Graph storage (persistent)
+      - ./data/neo4j_logs:/logs    # Server logs
