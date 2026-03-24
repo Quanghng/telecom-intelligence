@@ -38,7 +38,7 @@ neo4j:
   uri: "bolt://localhost:7687"
   user: "neo4j"
   password: "changeme"
-  database: "telecom"
+  database: "neo4j"
 
 # ------ Phase 3: LangGraph Agent ----------------------------
 agent:
