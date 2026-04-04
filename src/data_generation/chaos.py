@@ -69,6 +69,8 @@ class ChaosMonkey:
         }
         node_fault_map: Dict[str, Any] = {
             "node_overload": self._inject_node_overload,
+            "node_down": self._inject_node_down,            
+            "node_degraded": self._inject_node_degraded,
         }
 
         edge_fault_types: List[str] = [
@@ -140,6 +142,19 @@ class ChaosMonkey:
         """
         graph.nodes[node]["cpu_utilization"] = round(self._rng.uniform(95.0, 100.0), 2)
         self.fault_report["node_overload"] += 1
+    def _inject_node_down(self, graph: nx.Graph, node: int) -> None:
+        """Simulate a complete node failure."""
+        graph.nodes[node]["status"] = "Down"
+        if "node_down" not in self.fault_report:
+            self.fault_report["node_down"] = 0
+        self.fault_report["node_down"] += 1
+
+    def _inject_node_degraded(self, graph: nx.Graph, node: int) -> None:
+        """Simulate a degraded node state."""
+        graph.nodes[node]["status"] = "Degraded"
+        if "node_degraded" not in self.fault_report:
+            self.fault_report["node_degraded"] = 0
+        self.fault_report["node_degraded"] += 1
 
     def _inject_latency_spike(self, graph: nx.Graph, u: int, v: int) -> None:
         """Inflate latency on edge (u, v).

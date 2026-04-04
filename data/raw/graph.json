@@ -217,8 +217,7 @@
     {
       "layer": "physical",
       "node_type": "Edge_Router",
-      "status": "up",
-      "cpu_utilization": 98.21,
+      "status": "Degraded",
       "id": 35
     },
     {
@@ -483,7 +482,6 @@
       "layer": "physical",
       "node_type": "Edge_Router",
       "status": "up",
-      "cpu_utilization": 97.47,
       "id": 79
     },
     {
@@ -495,7 +493,7 @@
     {
       "layer": "physical",
       "node_type": "Edge_Router",
-      "status": "up",
+      "status": "Down",
       "id": 81
     },
     {
@@ -670,7 +668,6 @@
       "layer": "physical",
       "node_type": "Cell_Tower",
       "status": "up",
-      "cpu_utilization": 98.57,
       "id": 110
     },
     {
@@ -689,6 +686,7 @@
       "layer": "physical",
       "node_type": "Edge_Router",
       "status": "up",
+      "cpu_utilization": 98.57,
       "id": 113
     },
     {
@@ -773,7 +771,6 @@
       "layer": "physical",
       "node_type": "Cell_Tower",
       "status": "up",
-      "cpu_utilization": 98.37,
       "id": 127
     },
     {
@@ -791,7 +788,7 @@
     {
       "layer": "physical",
       "node_type": "Edge_Router",
-      "status": "up",
+      "status": "Down",
       "id": 130
     },
     {
@@ -810,7 +807,6 @@
       "layer": "physical",
       "node_type": "Cell_Tower",
       "status": "up",
-      "cpu_utilization": 96.33,
       "id": 133
     },
     {
@@ -834,7 +830,7 @@
     {
       "layer": "physical",
       "node_type": "Cell_Tower",
-      "status": "up",
+      "status": "Down",
       "id": 137
     },
     {
@@ -1183,7 +1179,6 @@
       "layer": "physical",
       "node_type": "Cell_Tower",
       "status": "up",
-      "cpu_utilization": 96.73,
       "id": 195
     },
     {
@@ -1213,7 +1208,7 @@
     {
       "layer": "physical",
       "node_type": "Cell_Tower",
-      "status": "up",
+      "status": "Degraded",
       "id": 200
     },
     {
@@ -1304,7 +1299,6 @@
       "layer": "physical",
       "node_type": "Cell_Tower",
       "status": "up",
-      "cpu_utilization": 97.03,
       "id": 215
     },
     {
@@ -1443,6 +1437,7 @@
       "layer": "physical",
       "node_type": "Edge_Router",
       "status": "up",
+      "cpu_utilization": 97.09,
       "id": 238
     },
     {
@@ -1460,8 +1455,7 @@
     {
       "layer": "physical",
       "node_type": "Edge_Router",
-      "status": "up",
-      "cpu_utilization": 99.64,
+      "status": "Down",
       "id": 241
     },
     {
@@ -1497,7 +1491,7 @@
     {
       "layer": "physical",
       "node_type": "Edge_Router",
-      "status": "up",
+      "status": "Down",
       "id": 247
     },
     {
@@ -1546,7 +1540,6 @@
       "layer": "physical",
       "node_type": "Cell_Tower",
       "status": "up",
-      "cpu_utilization": 98.95,
       "id": 255
     },
     {
@@ -1667,7 +1660,6 @@
       "layer": "physical",
       "node_type": "Edge_Router",
       "status": "up",
-      "cpu_utilization": 98.46,
       "id": 275
     },
     {
@@ -1727,7 +1719,7 @@
     {
       "layer": "physical",
       "node_type": "Cell_Tower",
-      "status": "up",
+      "status": "Degraded",
       "id": 285
     },
     {
@@ -2004,7 +1996,6 @@
       "layer": "physical",
       "node_type": "Edge_Router",
       "status": "up",
-      "cpu_utilization": 98.5,
       "id": 331
     },
     {
@@ -2046,7 +2037,7 @@
     {
       "layer": "physical",
       "node_type": "Edge_Router",
-      "status": "up",
+      "status": "Down",
       "id": 338
     },
     {
@@ -2070,7 +2061,7 @@
     {
       "layer": "physical",
       "node_type": "Core_Router",
-      "status": "up",
+      "status": "Down",
       "id": 342
     },
     {
@@ -2245,7 +2236,6 @@
       "layer": "physical",
       "node_type": "Cell_Tower",
       "status": "up",
-      "cpu_utilization": 98.07,
       "id": 371
     },
     {
@@ -2306,7 +2296,6 @@
       "layer": "physical",
       "node_type": "Edge_Router",
       "status": "up",
-      "cpu_utilization": 96.17,
       "id": 381
     },
     {
@@ -2318,7 +2307,7 @@
     {
       "layer": "physical",
       "node_type": "Edge_Router",
-      "status": "up",
+      "status": "Degraded",
       "id": 383
     },
     {
@@ -2343,6 +2332,7 @@
       "layer": "physical",
       "node_type": "Edge_Router",
       "status": "up",
+      "cpu_utilization": 95.34,
       "id": 387
     },
     {
@@ -2378,7 +2368,7 @@
     {
       "layer": "physical",
       "node_type": "Edge_Router",
-      "status": "up",
+      "status": "Down",
       "id": 393
     },
     {
@@ -2685,7 +2675,6 @@
       "layer": "physical",
       "node_type": "Cell_Tower",
       "status": "up",
-      "cpu_utilization": 99.81,
       "id": 444
     },
     {
@@ -2764,6 +2753,7 @@
       "layer": "physical",
       "node_type": "Edge_Router",
       "status": "up",
+      "cpu_utilization": 99.81,
       "id": 457
     },
     {
@@ -2992,7 +2982,6 @@
       "layer": "physical",
       "node_type": "Edge_Router",
       "status": "up",
-      "cpu_utilization": 99.73,
       "id": 495
     },
     {
