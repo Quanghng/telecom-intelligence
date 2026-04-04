@@ -27,6 +27,8 @@ data_generation:
       - node_overload
       - latency_spike
       - packet_loss
+      - node_down       
+      - node_degraded
   export:
     formats:
       - csv
