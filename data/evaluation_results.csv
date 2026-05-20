@@ -1,0 +1,125 @@
+query_id,question,ground_truth,hop_depth,category,pipeline_type,generated_answer,retrieved_contexts,latency_seconds
+TC-001,Which physical-layer TelecomNodes with node_type 'Core_Router' currently have status 'Down'?,"The physical-layer Core_Router nodes with status 'Down' can be identified by: MATCH (n:TelecomNode:physical) WHERE n.node_type = 'Core_Router' AND n.status = 'Down' RETURN n.name, n.node_id, n.status. All Core_Router nodes whose status property equals 'Down' are returned.",1,Status Lookup,GraphRAG,"### 1. Incident Summary
+The physical-layer Core_Router with node_id 342 is currently down. This incident may have cascading effects on higher layers of the network, potentially impacting logical and service components.
+
+### 2. Impacted Nodes
+| Node ID | Name | Type | Layer | Status |
+|---------|------|------|-------|--------|
+| 342     | CR-01 | Core_Router | Physical | Down |
+
+### 3. Cross-Layer Dependency Analysis
+The down status of Core_Router CR-01 (node_id 342) may impact higher layers. However, the graph context provided is limited to the physical layer. Cross-layer impact cannot be determined from the available data.
+
+### 4. Blast Radius & SLA Impact
+- **Total number of impacted nodes per layer:**
+  - Physical: 1
+- **Number and SLA tier of affected customers:**
+  - Insufficient data
+- **Any services running in a degraded or down state:**
+  - Insufficient data
+
+### 5. Recommended Actions
+1. **Monitor and Troubleshoot:** Initiate a detailed investigation to determine the cause of the Core_Router CR-01 (node_id 342) being down.
+2. **Reroute Traffic:** If possible, reroute traffic to ensure minimal disruption to services running on this router.
+3. **Escalate to Vendor:** If the issue is with the router hardware or software, escalate the issue to the vendor for further assistance.
+4. **Document Incident:** Record the incident and the steps taken for future reference and to improve network resilience.","[""{\""generated_cypher\"": \""MATCH (n:TelecomNode:physical {node_type: 'Core_Router'}) \\nWHERE n.status = 'Down' \\nRETURN n.name, n.node_id, n.status \\nLIMIT 25\"", \""graph_data_length\"": 1}""]",3.892509
+TC-001,Which physical-layer TelecomNodes with node_type 'Core_Router' currently have status 'Down'?,"The physical-layer Core_Router nodes with status 'Down' can be identified by: MATCH (n:TelecomNode:physical) WHERE n.node_type = 'Core_Router' AND n.status = 'Down' RETURN n.name, n.node_id, n.status. All Core_Router nodes whose status property equals 'Down' are returned.",1,Status Lookup,VectorRAG,"### 1. Incident Summary
+The physical-layer Core_Router node with node_id 342 is currently down. This incident affects the network's core infrastructure and may impact services running on dependent nodes.
+
+### 2. Impacted Nodes
+| Node ID | Name | Type | Layer | Status |
+|---------|------|------|-------|--------|
+| 342     |      | Core_Router | Physical | Down |
+
+### 3. Cross-Layer Dependency Analysis
+The impact of the down Core_Router node (342) propagates as follows:
+
+- **Physical Layer**: Core_Router 342 (Down)
+- **Logical Layer**: 
+  - MPLS_Tunnel MT-06 (Dependent on Core_Router 342)
+- **Service Layer**: 
+  - VoLTE VL-03 (Dependent on MPLS_Tunnel MT-06)
+- **Business Layer**: 
+  - Customer CUST-18 (Gold SLA, subscribed to VoLTE VL-03)
+
+### 4. Blast Radius & SLA Impact
+- **Total number of impacted nodes per layer**:
+  - Physical Layer: 1 (Core_Router 342)
+  - Logical Layer: 1 (MPLS_Tunnel MT-06)
+  - Service Layer: 1 (VoLTE VL-03)
+  - Business Layer: 1 (Customer CUST-18)
+
+- **Number and SLA tier of affected customers**:
+  - Business Customer CUST-18 (Gold SLA)
+
+- **Services running in a degraded or down state**:
+  - VoLTE VL-03 (Degraded)
+
+### 5. Recommended Actions
+1. **Reroute Traffic**: Immediately reroute traffic from MPLS_Tunnel MT-06 to another available tunnel to mitigate the impact on VoLTE VL-03.
+2. **Escalate to Vendor**: Escalate the issue to the vendor for Core_Router 342 to expedite repairs.
+3. **Notify Gold-SLA Customers**: Inform Customer CUST-18 about the potential impact on their Gold SLA service and provide updates on the resolution.
+4. **Monitor Network**: Continuously monitor the network for any further disruptions or degradation in service quality.","[""TelecomNode physical Core_Router node_id 342 is currently Down."", ""TelecomNode physical Core_Router node_id 394 is currently up."", ""TelecomNode physical Core_Router node_id 375 is currently up."", ""TelecomNode physical Core_Router node_id 100 is currently up."", ""TelecomNode physical Core_Router node_id 9 is currently up.""]",3.779327
+TC-009,"Is there a path from a physical-layer Core_Router with status 'Down' to another physical-layer Edge_Router via CONNECTS_TO, and do any business-layer customers depend on that Edge_Router through the RUNS_ON, DEPENDS_ON, and SUBSCRIBED_TO chain?","4-hop path: physical CONNECTS_TO physical, then up to business: MATCH (cr:TelecomNode:physical)-[:CONNECTS_TO]-(er:TelecomNode:physical)<-[:RUNS_ON]-(l:TelecomNode:logical)<-[:DEPENDS_ON]-(s:TelecomNode:service)<-[:SUBSCRIBED_TO]-(c:TelecomNode:business) WHERE cr.node_type = 'Core_Router' AND cr.status = 'Down' AND er.node_type = 'Edge_Router' RETURN cr.name, er.name, l.name, s.name, c.name, c.sla. This reveals the full downstream impact of a failed Core_Router propagating through an adjacent Edge_Router up to the business layer.",4,Path Analysis,GraphRAG,"### 1. Incident Summary
+The physical-layer Core_Router CR-01 is down, and there is an Edge_Router ER-02 that is operational. We need to determine if there is a path from the down Core_Router to the Edge_Router via CONNECTS_TO, and if any business-layer customers depend on that Edge_Router through the RUNS_ON, DEPENDS_ON, and SUBSCRIBED_TO chain.
+
+### 2. Impacted Nodes
+| Node ID | Name | Type | Layer | Status |
+|---------|------|------|-------|--------|
+| CR-01   |      | Core_Router | Physical | Down |
+| ER-02   |      | Edge_Router | Physical | Up    |
+
+### 3. Cross-Layer Dependency Analysis
+- **Physical Layer:**
+  - **Core_Router CR-01 (Down)**
+    - **Status:** Down
+    - **Relationship:** CONNECTS_TO
+    - **Next Node:** Edge_Router ER-02 (Up)
+    - **Status:** Up
+  - **Logical Layer:**
+    - **MPLS_Tunnel MT-06 (Degraded)**
+      - **Relationship:** RUNS_ON
+      - **Next Node:** Service VoLTE VL-03 (Degraded)
+      - **Relationship:** DEPENDS_ON
+      - **Next Node:** Business Customer CUST-18 (Silver SLA at risk)
+      - **Relationship:** SUBSCRIBED_TO
+  - **Service Layer:**
+    - **VoLTE VL-03 (Degraded)**
+      - **Relationship:** DEPENDS_ON
+      - **Next Node:** Business Customer CUST-18 (Silver SLA at risk)
+      - **Relationship:** SUBSCRIBED_TO
+
+### 4. Blast Radius & SLA Impact
+- **Total Number of Impacted Nodes per Layer:**
+  - Physical Layer: 1 (CR-01)
+  - Logical Layer: 1 (MT-06)
+  - Service Layer: 1 (VL-03)
+  - Business Layer: 1 (CUST-18)
+
+- **Number and SLA Tier of Affected Customers:**
+  - Business Customer CUST-18 (Silver SLA at risk)
+
+- **Degraded or Down Services:**
+  - VoLTE VL-03 (Degraded)
+
+### 5. Recommended Actions
+1. **Reroute Traffic:** Immediately reroute traffic from the down Core_Router CR-01 to the operational Edge_Router ER-02 to mitigate the impact on the MPLS_Tunnel MT-06.
+2. **Monitor Customer SLA:** Closely monitor the SLA status of Business Customer CUST-18 to ensure that the Silver SLA is not breached.
+3. **Escalate to Vendor:** Escalate the issue to the vendor for further investigation and potential hardware replacement or repair.
+4. **Notify Customers:** Inform the affected business customers (CUST-18) about the current status and expected resolution time.","[""{\""generated_cypher\"": \""MATCH (cr:TelecomNode:physical {node_type: 'Core_Router', status: 'Down'}) \\nMATCH (cr)-[:CONNECTS_TO]->(er:TelecomNode:physical {node_type: 'Edge_Router'}) \\nOPTIONAL MATCH (er)<-[:RUNS_ON]-(l:TelecomNode:logical)<-[:DEPENDS_ON]-(s:TelecomNode:service)<-[:SUBSCRIBED_TO]-(c:TelecomNode:business) \\nRETURN cr.name, cr.status, er.name, er.status, c.name, c.sla \\nLIMIT 25\"", \""graph_data_length\"": 1}""]",8.235616
+TC-009,"Is there a path from a physical-layer Core_Router with status 'Down' to another physical-layer Edge_Router via CONNECTS_TO, and do any business-layer customers depend on that Edge_Router through the RUNS_ON, DEPENDS_ON, and SUBSCRIBED_TO chain?","4-hop path: physical CONNECTS_TO physical, then up to business: MATCH (cr:TelecomNode:physical)-[:CONNECTS_TO]-(er:TelecomNode:physical)<-[:RUNS_ON]-(l:TelecomNode:logical)<-[:DEPENDS_ON]-(s:TelecomNode:service)<-[:SUBSCRIBED_TO]-(c:TelecomNode:business) WHERE cr.node_type = 'Core_Router' AND cr.status = 'Down' AND er.node_type = 'Edge_Router' RETURN cr.name, er.name, l.name, s.name, c.name, c.sla. This reveals the full downstream impact of a failed Core_Router propagating through an adjacent Edge_Router up to the business layer.",4,Path Analysis,VectorRAG,"### 1. Incident Summary
+The user is seeking to determine if a path exists from a physical-layer Core_Router with a 'Down' status to another physical-layer Edge_Router via the CONNECTS_TO relationship, and if any business-layer customers depend on that Edge_Router through the RUNS_ON, DEPENDS_ON, and SUBSCRIBED_TO chain. However, the provided graph context does not contain the necessary physical-layer data to identify the specific Core_Router or Edge_Router nodes and their relationships.
+
+### 2. Impacted Nodes
+Retrieved context is limited to the physical layer. Cross-layer impact cannot be determined from the available data.
+
+### 3. Cross-Layer Dependency Analysis
+Retrieved context is limited to the physical layer. Cross-layer impact cannot be determined from the available data.
+
+### 4. Blast Radius & SLA Impact
+Retrieved context is limited to the physical layer. Cross-layer impact cannot be determined from the available data.
+
+### 5. Recommended Actions
+1. **Request Additional Physical-Layer Data**: Obtain the specific Core_Router and Edge_Router node IDs and their relationships to perform a thorough analysis.
+2. **Monitor Network Status**: Continuously monitor the network status to detect any changes that might affect the physical-layer nodes.
+3. **Escalate if Necessary**: If the Core_Router remains down and affects critical services, escalate the issue to the vendor or higher management for immediate attention.","[""Relationship SUBSCRIBED_TO from node 580 to node 617 on the business layer."", ""Relationship SUBSCRIBED_TO from node 583 to node 619 on the business layer."", ""Relationship SUBSCRIBED_TO from node 569 to node 612 on the business layer."", ""Relationship SUBSCRIBED_TO from node 574 to node 618 on the business layer."", ""Relationship SUBSCRIBED_TO from node 574 to node 615 on the business layer.""]",3.058259

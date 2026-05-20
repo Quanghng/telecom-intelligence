@@ -84,6 +84,11 @@ class LLMSettings(BaseSettings):
     api_key: SecretStr = Field(default=...)
     model: str = Field(default="gpt-4o")
 
+    hf_token: SecretStr | None = Field(
+        default=None, 
+        description="Read-only HuggingFace token to bypass rate limits"
+    )
+
 
 class AppSettings(BaseSettings):
     """Root configuration that aggregates all sub-settings."""

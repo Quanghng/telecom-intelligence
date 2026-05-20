@@ -1,0 +1,59 @@
+query_id,question,ground_truth,hop_depth,category,pipeline_type,generated_answer,retrieved_contexts,latency_seconds,faithfulness,answer_relevancy,context_precision,context_recall
+TC-006,"If a physical-layer Core_Router with status 'Down' has logical-layer nodes running on it, which service-layer nodes depend on those logical nodes?","3-hop path from physical through logical to service: MATCH (p:TelecomNode:physical)<-[:RUNS_ON]-(l:TelecomNode:logical)<-[:DEPENDS_ON]-(s:TelecomNode:service) WHERE p.node_type = 'Core_Router' AND p.status = 'Down' RETURN p.name, l.name, s.name, s.service_type. This reveals the service-layer blast radius of a failed Core_Router propagating through its hosted logical nodes.",3,Blast Radius,GraphRAG,"### 1. Incident Summary
+A physical-layer Core_Router with node ID `SYNTH-H4-CORE-999` is down, impacting logical-layer nodes running on it. The status of these logical nodes is also down, which in turn affects service-layer nodes that depend on them. Another physical-layer Core_Router with node ID `SYNTH-CORE-001` is also down, affecting a logical-layer MPLS_Tunnel and a service-layer Enterprise_VPN.
+
+### 2. Impacted Nodes
+| Node ID | Name | Type | Layer | Status |
+| --- | --- | --- | --- | --- |
+| SYNTH-H4-CORE-999 | H4-Core-Router | Core_Router | Physical | Down |
+| SYNTH-CORE-001 | Synth-Core-Router-Failed | Core_Router | Physical | Down |
+| SYNTH-H4-VLAN-888 | H4-VLAN-Segment | VLAN | Logical | Down |
+| SYNTH-LOGICAL-002 | Synth-MPLS-Backbone | MPLS_Tunnel | Logical | Degraded |
+| SYNTH-H4-IPTV-777 | H4-IPTV-Broadcast | IPTV | Service | Down |
+| SYNTH-SERVICE-001 | Synth-B2B-VPN | Enterprise_VPN | Service | Degraded |
+
+### 3. Cross-Layer Dependency Analysis
+The impact propagates across layers as follows:
+- Physical Core_Router `SYNTH-H4-CORE-999` (Down) → Logical VLAN `SYNTH-H4-VLAN-888` (Down) via RUNS_ON relationship.
+- Logical VLAN `SYNTH-H4-VLAN-888` (Down) → Service IPTV `SYNTH-H4-IPTV-777` (Down) via DEPENDS_ON relationship.
+- Physical Core_Router `SYNTH-CORE-001` (Down) → Logical MPLS_Tunnel `SYNTH-LOGICAL-002` (Degraded) via RUNS_ON relationship.
+- Logical MPLS_Tunnel `SYNTH-LOGICAL-002` (Degraded) → Service Enterprise_VPN `SYNTH-SERVICE-001` (Degraded) via DEPENDS_ON relationship.
+
+### 4. Blast Radius & SLA Impact
+- Total number of impacted nodes per layer: 
+  - Physical: 2
+  - Logical: 2
+  - Service: 2
+- Number and SLA tier of affected customers: 
+  - Gold SLA: 2 (SYNTH-H4-IPTV-777, SYNTH-SERVICE-001)
+  - Silver SLA: 1 (SYNTH-CORE-001)
+- Services running in a degraded or down state: 
+  - IPTV `SYNTH-H4-IPTV-777` (Down)
+  - Enterprise_VPN `SYNTH-SERVICE-001` (Degraded)
+
+### 5. Recommended Actions
+1. **Escalate to vendor**: Immediately notify the vendor for the failed physical-layer Core_Routers (`SYNTH-H4-CORE-999` and `SYNTH-CORE-001`) to expedite repair or replacement.
+2. **Reroute traffic**: Attempt to reroute traffic from the affected logical-layer nodes (`SYNTH-H4-VLAN-888` and `SYNTH-LOGICAL-002`) to minimize the impact on service-layer nodes.
+3. **Notify Gold-SLA customers**: Inform Gold-SLA customers (associated with `SYNTH-H4-IPTV-777` and `SYNTH-SERVICE-001`) about the current status and expected resolution time.
+4. **Monitor Silver-SLA customer impact**: Closely monitor the impact on the Silver-SLA customer associated with `SYNTH-CORE-001` and be prepared to escalate if necessary.
+5. **Conduct a root cause analysis**: Once the immediate issues are resolved, conduct a thorough root cause analysis to prevent similar incidents in the future.","[""{\""generated_cypher\"": \""MATCH (p:TelecomNode:physical {node_type: 'Core_Router'})<-[:RUNS_ON]-(l:TelecomNode:logical)<-[:DEPENDS_ON]-(s:TelecomNode:service) \\nWHERE p.status = 'Down' \\nRETURN p, l, s \\nLIMIT 25\"", \""graph_data_length\"": 2, \""graph_data\"": [{\""p\"": {\""node_type\"": \""Core_Router\"", \""cpu_utilization\"": \""0.0\"", \""name\"": \""H4-Core-Router\"", \""sla\"": \""Gold\"", \""layer\"": \""physical\"", \""node_id\"": \""SYNTH-H4-CORE-999\"", \""status\"": \""Down\""}, \""l\"": {\""cpu_utilization\"": \""0.0\"", \""node_type\"": \""VLAN\"", \""name\"": \""H4-VLAN-Segment\"", \""sla\"": \""Gold\"", \""layer\"": \""logical\"", \""node_id\"": \""SYNTH-H4-VLAN-888\"", \""status\"": \""Down\""}, \""s\"": {\""cpu_utilization\"": \""0.0\"", \""node_type\"": \""IPTV\"", \""name\"": \""H4-IPTV-Broadcast\"", \""sla\"": \""Gold\"", \""layer\"": \""service\"", \""node_id\"": \""SYNTH-H4-IPTV-777\"", \""status\"": \""Down\""}}, {\""p\"": {\""node_type\"": \""Core_Router\"", \""cpu_utilization\"": \""0.0\"", \""name\"": \""Synth-Core-Router-Failed\"", \""sla\"": \""Silver\"", \""layer\"": \""physical\"", \""node_id\"": \""SYNTH-CORE-001\"", \""status\"": \""Down\""}, \""l\"": {\""node_type\"": \""MPLS_Tunnel\"", \""cpu_utilization\"": \""0.0\"", \""name\"": \""Synth-MPLS-Backbone\"", \""sla\"": \""Gold\"", \""layer\"": \""logical\"", \""node_id\"": \""SYNTH-LOGICAL-002\"", \""status\"": \""Degraded\""}, \""s\"": {\""node_type\"": \""Enterprise_VPN\"", \""cpu_utilization\"": \""0.0\"", \""name\"": \""Synth-B2B-VPN\"", \""sla\"": \""Gold\"", \""layer\"": \""service\"", \""node_id\"": \""SYNTH-SERVICE-001\"", \""status\"": \""Degraded\""}}]}""]",2.798055,0.851063829787234,0.51705011712584,0.9999999999,1.0
+TC-006,"If a physical-layer Core_Router with status 'Down' has logical-layer nodes running on it, which service-layer nodes depend on those logical nodes?","3-hop path from physical through logical to service: MATCH (p:TelecomNode:physical)<-[:RUNS_ON]-(l:TelecomNode:logical)<-[:DEPENDS_ON]-(s:TelecomNode:service) WHERE p.node_type = 'Core_Router' AND p.status = 'Down' RETURN p.name, l.name, s.name, s.service_type. This reveals the service-layer blast radius of a failed Core_Router propagating through its hosted logical nodes.",3,Blast Radius,VectorRAG,"### 1. Incident Summary
+The user is inquiring about the impact of a physical-layer Core_Router being down on service-layer nodes, given that logical-layer nodes run on the Core_Router. However, the provided graph context does not contain any information about a Core_Router being down or logical-layer nodes running on it. The context only mentions physical-layer Core_Routers with status 'up'.
+
+### 2. Impacted Nodes
+Insufficient data. The graph context does not provide information about logical-layer or service-layer nodes.
+
+### 3. Cross-Layer Dependency Analysis
+Insufficient data. The graph context is limited to physical-layer data and does not contain cross-layer dependency information.
+
+### 4. Blast Radius & SLA Impact
+Insufficient data. The graph context does not provide information about the blast radius or SLA impact.
+
+### 5. Recommended Actions
+1. Retrieve the updated graph context that includes the physical-layer Core_Router with status 'Down' and logical-layer nodes running on it.
+2. Analyze the cross-layer dependencies to determine the impacted service-layer nodes.
+3. Assess the blast radius and SLA impact based on the updated graph context.
+4. Develop a mitigation plan to minimize the impact on service-layer nodes and affected customers.
+5. Implement the mitigation plan and monitor the network for any further issues.
+
+Note: The retrieved context is limited to the physical layer. Cross-layer impact cannot be determined from the available data.","[""TelecomNode physical Core_Router node_id 1 is currently up."", ""TelecomNode physical Core_Router node_id 9 is currently up."", ""TelecomNode physical Core_Router node_id 7 is currently up."", ""TelecomNode physical Core_Router node_id 12 is currently up."", ""TelecomNode physical Core_Router node_id 124 is currently up.""]",1.173984,0.6190476190476191,0.0,0.0,0.0

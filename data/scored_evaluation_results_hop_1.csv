@@ -1,0 +1,41 @@
+query_id,question,ground_truth,hop_depth,category,pipeline_type,generated_answer,retrieved_contexts,latency_seconds,faithfulness,answer_relevancy,context_precision,context_recall
+TC-001,Which physical-layer TelecomNodes with node_type 'Core_Router' currently have status 'Down'?,"The physical-layer Core_Router nodes with status 'Down' can be identified by: MATCH (n:TelecomNode:physical) WHERE n.node_type = 'Core_Router' AND n.status = 'Down' RETURN n.name, n.node_id, n.status. All Core_Router nodes whose status property equals 'Down' are returned.",1,Status Lookup,GraphRAG,"### 1. Incident Summary
+The user has requested information about physical-layer TelecomNodes with node_type 'Core_Router' that are currently down. Based on the provided graph context, there is one Core_Router with a status of 'Down'. This incident may have implications for network reliability and customer service.
+
+### 2. Impacted Nodes
+| Node ID | Name | Type | Layer | Status |
+| --- | --- | --- | --- | --- |
+| 342 |  | Core_Router | physical | Down |
+
+### 3. Cross-Layer Dependency Analysis
+Insufficient data
+
+### 4. Blast Radius & SLA Impact
+Insufficient data
+
+### 5. Recommended Actions
+1. **Investigate and resolve the issue with Core_Router 342**: As the node is down, it is crucial to identify the root cause and take corrective action to restore its functionality.
+2. **Assess potential impact on logical, service, and business layers**: Although the graph context is limited to the physical layer, it is essential to consider potential cascading effects on higher layers and take proactive measures to mitigate them.
+3. **Retrieve additional graph context**: To gain a better understanding of the situation, it is recommended to retrieve more data from the knowledge graph, including information about logical, service, and business layers, as well as relationships between nodes.","[""{\""generated_cypher\"": \""MATCH (n:TelecomNode:physical {node_type: 'Core_Router'}) \\nWHERE n.status = 'Down' \\nRETURN n \\nLIMIT 25\"", \""graph_data_length\"": 1, \""graph_data\"": [{\""n\"": {\""node_type\"": \""Core_Router\"", \""cpu_utilization\"": \""\"", \""name\"": \""\"", \""sla\"": \""\"", \""layer\"": \""physical\"", \""status\"": \""Down\"", \""node_id\"": \""342\""}}]}""]",1.717632,0.6,0.6727979116472849,0.9999999999,1.0
+TC-001,Which physical-layer TelecomNodes with node_type 'Core_Router' currently have status 'Down'?,"The physical-layer Core_Router nodes with status 'Down' can be identified by: MATCH (n:TelecomNode:physical) WHERE n.node_type = 'Core_Router' AND n.status = 'Down' RETURN n.name, n.node_id, n.status. All Core_Router nodes whose status property equals 'Down' are returned.",1,Status Lookup,VectorRAG,"### 1. Incident Summary
+The user has requested information about physical-layer TelecomNodes with node_type 'Core_Router' that are currently in a 'Down' status. Based on the provided graph context, we have identified one such node. The incident summary is that there is a single Core_Router node that is currently down, which may impact network operations.
+
+### 2. Impacted Nodes
+| Node ID | Name | Type | Layer | Status |
+| --- | --- | --- | --- | --- |
+| 342 | - | Core_Router | Physical | Down |
+
+Note: The name of the impacted node is not provided in the graph context.
+
+### 3. Cross-Layer Dependency Analysis
+Insufficient data. The provided graph context only contains physical-layer data and does not include information about logical, service, or business layers. Therefore, we cannot determine the cross-layer dependencies.
+
+### 4. Blast Radius & SLA Impact
+Insufficient data. The graph context does not provide information about the blast radius, SLA impact, or affected customers.
+
+### 5. Recommended Actions
+1. Investigate the cause of the Core_Router node (node_id 342) being down and take corrective action to bring it back online.
+2. Review network topology to identify potential backup or redundant paths that can be used to mitigate the impact of the down node.
+3. Consider notifying relevant teams or stakeholders about the issue, although specific customer or service impact cannot be determined from the provided data. 
+
+Retrieved context is limited to the physical layer. Cross-layer impact cannot be determined from the available data.","[""TelecomNode physical Core_Router node_id 342 is currently Down."", ""TelecomNode physical Core_Router node_id 394 is currently up."", ""TelecomNode physical Core_Router node_id 375 is currently up."", ""TelecomNode physical Core_Router node_id 100 is currently up."", ""TelecomNode physical Core_Router node_id 9 is currently up.""]",1.757479,0.6666666666666666,0.707163275230793,0.9999999999,0.5

@@ -36,7 +36,7 @@ def main():
     )
 
     # ── Initialization ───────────────────────────────────────────────────
-    hf_model = "meta-llama/Meta-Llama-3-8B-Instruct"
+    hf_model = "Qwen/Qwen2.5-7B-Instruct"
     cypher_agent = CypherGenerationAgent(client=client, model=hf_model, temperature=0.0)
     synthesis_agent = SynthesisAgent(client=client, model=hf_model, temperature=0.3)
 

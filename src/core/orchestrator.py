@@ -33,6 +33,7 @@ Usage
 from __future__ import annotations
 
 import logging
+import traceback
 from typing import Any, Dict, List
 
 from src.database.connection import Neo4jConnection
@@ -121,34 +122,60 @@ class GraphRAGOrchestrator:
         neo4j.exceptions.Neo4jError
             On any driver- or server-side execution error.
         """
-        logger.info("Pipeline started for query: %s", user_query)
+        try:
+          logger.info("Pipeline started for query: %s", user_query)
 
-        # Step 1 – Natural language → Cypher
-        logger.info("Step 1/3: Generating Cypher query …")
-        cypher_str: str = self._cypher_agent.generate_query(user_query)
-        logger.info("Cypher generated: %s", cypher_str)
+          # Step 1 – Natural language → Cypher
+          logger.info("Step 1/3: Generating Cypher query …")
+          cypher_str: str = self._cypher_agent.generate_query(user_query)
+          logger.info("Cypher generated: %s", cypher_str)
 
-        # Step 2 – Cypher → Graph data (sanitised read-only execution)
-        logger.info("Step 2/3: Executing Cypher against Neo4j …")
-        results: List[Dict[str, Any]] = self._connection.execute_llm_read_query(
-            cypher_str,
-        )
-        logger.info("Neo4j returned %d record(s).", len(results))
+          # Step 2 – Cypher → Graph data (sanitised read-only execution)
+          logger.info("Step 2/3: Executing Cypher against Neo4j …")
+          results: List[Dict[str, Any]] = self._connection.execute_llm_read_query(
+              cypher_str,
+          )
+          logger.info("Neo4j returned %d record(s).", len(results))
 
-        # Step 3 – Graph data + original query → Operational report
-        logger.info("Step 3/3: Synthesising Operational Intelligence report …")
-        report: str = self._synthesis_agent.generate_report(
-            user_prompt=user_query,
-            graph_context=results,
-        )
-        logger.info("Report synthesis complete (%d chars).", len(report))
+          # Guard: skip synthesis if Cypher returned nothing
+          if not results:
+              logger.warning("Cypher query returned 0 records — skipping synthesis.")
+              return {
+                  "user_query": user_query,
+                  "generated_cypher": cypher_str,
+                  "graph_data_length": len(results),
+                  "final_report": "No data returned from the knowledge graph for this query.",
+              }
 
-        payload: Dict[str, Any] = {
-            "user_query": user_query,
-            "generated_cypher": cypher_str,
-            "graph_data_length": len(results),
-            "final_report": report,
-        }
+          # Step 3 – Graph data + original query → Operational report
+          logger.info("Step 3/3: Synthesising Operational Intelligence report …")
+          report: str = self._synthesis_agent.generate_report(
+              user_prompt=user_query,
+              graph_context=results,
+          )
+          logger.info("Report synthesis complete (%d chars).", len(report))
 
-        logger.info("Pipeline finished successfully.")
-        return payload
+          payload: Dict[str, Any] = {
+              "user_query": user_query,
+              "generated_cypher": cypher_str,
+              "graph_data_length": len(results),
+              "graph_data": results,
+              "final_report": report,
+          }
+
+          logger.info("Pipeline finished successfully.")
+          return payload
+          pass
+        except Exception as exc:
+            logger.exception("GraphRAG pipeline failed for: %s", user_query)
+            return {
+                "generated_answer": f"[ERROR] GraphRAG pipeline raised an exception: {exc}",
+                "retrieved_contexts": [
+                    f'{{"error_type": "{type(exc).__name__}", '
+                    f'"error_message": "{str(exc)}", '
+                    f'"traceback": "{traceback.format_exc()[-500:]}"}}'
+                ],
+                "latency_seconds": 0.0,
+            }
+    
+    

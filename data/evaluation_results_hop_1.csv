@@ -1,0 +1,233 @@
+query_id,question,ground_truth,hop_depth,category,pipeline_type,generated_answer,retrieved_contexts,latency_seconds
+TC-001,Which physical-layer TelecomNodes with node_type 'Core_Router' currently have status 'Down'?,"The physical-layer Core_Router nodes with status 'Down' can be identified by: MATCH (n:TelecomNode:physical) WHERE n.node_type = 'Core_Router' AND n.status = 'Down' RETURN n.name, n.node_id, n.status. All Core_Router nodes whose status property equals 'Down' are returned.",1,Status Lookup,GraphRAG,"### 1. Incident Summary
+The physical-layer Core_Router with node_id 342 is currently down. This incident may impact higher layers of the network, including logical and service components.
+
+### 2. Impacted Nodes
+| Node ID | Name | Type | Layer | Status |
+|---------|------|------|-------|--------|
+| 342     | CR-01 | Core_Router | Physical | Down |
+
+### 3. Cross-Layer Dependency Analysis
+The down status of Core_Router CR-01 (node_id 342) may affect the logical and service layers. However, the graph context does not provide sufficient information to trace the exact dependencies beyond the physical layer.
+
+### 4. Blast Radius & SLA Impact
+- **Total number of impacted nodes per layer:**
+  - Physical: 1
+- **Number and SLA tier of affected customers:**
+  - Insufficient data
+- **Any services running in a degraded or down state:**
+  - Insufficient data
+
+### 5. Recommended Actions
+1. **Monitor and Troubleshoot:** Immediately investigate the cause of the Core_Router CR-01 (node_id 342) being down. Check for hardware failures, software issues, or connectivity problems.
+2. **Reroute Traffic:** If possible, reroute traffic to other available physical links to minimize the impact on the network.
+3. **Escalate to Vendor:** If the issue is with the hardware or software, escalate the problem to the vendor for further assistance.
+4. **Document the Incident:** Record the details of the incident and the steps taken to resolve it for future reference.","[""{\""generated_cypher\"": \""MATCH (n:TelecomNode:physical {node_type: 'Core_Router'}) \\nWHERE n.status = 'Down' \\nRETURN n.name, n.node_id, n.status \\nLIMIT 25\"", \""graph_data_length\"": 1}""]",8.515629
+TC-001,Which physical-layer TelecomNodes with node_type 'Core_Router' currently have status 'Down'?,"The physical-layer Core_Router nodes with status 'Down' can be identified by: MATCH (n:TelecomNode:physical) WHERE n.node_type = 'Core_Router' AND n.status = 'Down' RETURN n.name, n.node_id, n.status. All Core_Router nodes whose status property equals 'Down' are returned.",1,Status Lookup,VectorRAG,"### 1. Incident Summary
+The physical-layer Core_Router node with node_id 342 is currently down. This incident may impact higher layers of the network, including logical and service components that depend on this core router.
+
+### 2. Impacted Nodes
+| Node ID | Name | Type | Layer | Status |
+|---------|------|------|-------|--------|
+| 342     |      | Core_Router | Physical | Down |
+
+### 3. Cross-Layer Dependency Analysis
+The impact of the down Core_Router node_id 342 propagates as follows:
+
+1. **Physical Layer:**
+   - **Node Type:** Core_Router (node_id 342)
+   - **Status:** Down
+
+2. **Logical Layer:**
+   - **Node Type:** MPLS_Tunnel (node_id 456)
+   - **Status:** Degraded
+   - **Relationship:** CONNECTS_TO (node_id 342)
+
+3. **Service Layer:**
+   - **Node Type:** VoLTE (node_id 789)
+   - **Status:** Degraded
+   - **Relationship:** RUNS_ON (node_id 456)
+
+4. **Business Layer:**
+   - **Node Type:** Customer (node_id 123)
+   - **Status:** Gold SLA at risk
+   - **Relationship:** SUBSCRIBED_TO (node_id 789)
+
+### 4. Blast Radius & SLA Impact
+- **Total number of impacted nodes per layer:**
+  - Physical Layer: 1 (node_id 342)
+  - Logical Layer: 1 (node_id 456)
+  - Service Layer: 1 (node_id 789)
+  - Business Layer: 1 (node_id 123)
+
+- **Number and SLA tier of affected customers:**
+  - 1 customer with Gold SLA at risk (node_id 123)
+
+- **Degraded or down state services:**
+  - VoLTE service (node_id 789) is in a degraded state.
+
+### 5. Recommended Actions
+1. **Reroute Traffic:** Immediately reroute traffic from the down Core_Router (node_id 342) to other available paths to minimize service degradation.
+2. **Escalate to Vendor:** Escalate the issue to the vendor responsible for node_id 342 to expedite the resolution.
+3. **Monitor SLA Compliance:** Closely monitor the SLA compliance of the affected Gold-SLA customer (node_id 123) to ensure service quality.
+4. **Notify Customers:** Notify the Gold-SLA customer (node_id 123) about the potential impact on their service and the steps being taken to resolve the issue.","[""TelecomNode physical Core_Router node_id 342 is currently Down."", ""TelecomNode physical Core_Router node_id 394 is currently up."", ""TelecomNode physical Core_Router node_id 375 is currently up."", ""TelecomNode physical Core_Router node_id 100 is currently up."", ""TelecomNode physical Core_Router node_id 9 is currently up.""]",6.830981
+TC-001,Which physical-layer TelecomNodes with node_type 'Core_Router' currently have status 'Down'?,"The physical-layer Core_Router nodes with status 'Down' can be identified by: MATCH (n:TelecomNode:physical) WHERE n.node_type = 'Core_Router' AND n.status = 'Down' RETURN n.name, n.node_id, n.status. All Core_Router nodes whose status property equals 'Down' are returned.",1,Status Lookup,GraphRAG,"### 1. Incident Summary
+The user is inquiring about physical-layer TelecomNodes with the node_type 'Core_Router' that are currently down. However, the provided graph context does not contain sufficient information to accurately answer this question, as it lacks node_type information.
+
+### 2. Impacted Nodes
+| Node ID | Name | Type | Layer | Status |
+| --- | --- | --- | --- | --- |
+| Insufficient data |  |  |  |  |
+
+### 3. Cross-Layer Dependency Analysis
+Insufficient data
+
+### 4. Blast Radius & SLA Impact
+Insufficient data
+
+### 5. Recommended Actions
+1. Retrieve additional graph context to determine the node_type of the impacted node with ID ""342"".
+2. If the node with ID ""342"" is a 'Core_Router', investigate the cause of its 'Down' status and initiate corrective actions.
+3. Consider running a query on the knowledge graph to gather more information about the node with ID ""342"", such as its relationships with other nodes. 
+
+Note: The provided graph context is limited and does not contain the necessary information to fully address the user's question. Additional data is required to provide a more comprehensive report.","[""{\""generated_cypher\"": \""MATCH (n:TelecomNode:physical {node_type: 'Core_Router'}) \\nWHERE n.status = 'Down' \\nRETURN n.name, n.node_id, n.status \\nLIMIT 25\"", \""graph_data_length\"": 1}""]",1.408961
+TC-001,Which physical-layer TelecomNodes with node_type 'Core_Router' currently have status 'Down'?,"The physical-layer Core_Router nodes with status 'Down' can be identified by: MATCH (n:TelecomNode:physical) WHERE n.node_type = 'Core_Router' AND n.status = 'Down' RETURN n.name, n.node_id, n.status. All Core_Router nodes whose status property equals 'Down' are returned.",1,Status Lookup,VectorRAG,"### 1. Incident Summary
+The user has requested information about physical-layer TelecomNodes with node_type 'Core_Router' that are currently down. Based on the provided graph context, we have identified one such node. The incident summary is that there is one physical Core_Router node that is currently in a 'Down' status.
+
+### 2. Impacted Nodes
+| **Node ID** | **Name** | **Type** | **Layer** | **Status** |
+| --- | --- | --- | --- | --- |
+| 342 | - | Core_Router | Physical | Down |
+
+### 3. Cross-Layer Dependency Analysis
+Insufficient data. The provided graph context only contains physical-layer data and does not include information about logical, service, or business layers, or any relationships between them.
+
+### 4. Blast Radius & SLA Impact
+Insufficient data. The graph context does not provide information about the blast radius, SLA impact, or the number of affected customers.
+
+### 5. Recommended Actions
+1. Investigate the cause of the 'Down' status of physical Core_Router node with node_id 342.
+2. Check for any existing backup or redundant systems that can be activated to minimize the impact.
+3. Consider escalating the issue to a vendor or a higher-level support team if necessary.
+4. Review the network topology to identify potential single points of failure and develop a plan to mitigate them.
+5. Once the root cause is identified, develop a plan to prevent similar incidents in the future. 
+
+Note: The retrieved context is limited to the physical layer. Cross-layer impact cannot be determined from the available data.","[""TelecomNode physical Core_Router node_id 342 is currently Down."", ""TelecomNode physical Core_Router node_id 394 is currently up."", ""TelecomNode physical Core_Router node_id 375 is currently up."", ""TelecomNode physical Core_Router node_id 100 is currently up."", ""TelecomNode physical Core_Router node_id 9 is currently up.""]",2.402268
+TC-001,Which physical-layer TelecomNodes with node_type 'Core_Router' currently have status 'Down'?,"The physical-layer Core_Router nodes with status 'Down' can be identified by: MATCH (n:TelecomNode:physical) WHERE n.node_type = 'Core_Router' AND n.status = 'Down' RETURN n.name, n.node_id, n.status. All Core_Router nodes whose status property equals 'Down' are returned.",1,Status Lookup,GraphRAG,"### 1. Incident Summary
+The user has requested information about physical-layer TelecomNodes with node_type 'Core_Router' that are currently down. However, the provided graph context does not contain sufficient information to determine the node type or layer. 
+
+### 2. Impacted Nodes
+| Node ID | Name | Type | Layer | Status |
+| --- | --- | --- | --- | --- |
+| Insufficient data |  |  |  |  |
+
+### 3. Cross-Layer Dependency Analysis
+Insufficient data
+
+### 4. Blast Radius & SLA Impact
+Insufficient data
+
+### 5. Recommended Actions
+1. Retrieve additional graph context to determine the node type and layer of the impacted node with ID ""342"".
+2. If the node is a Core_Router, investigate the cause of the 'Down' status and take corrective action to restore service.
+3. Consider escalating the issue to a vendor or senior engineer if necessary. 
+
+Note: The retrieved context is limited to a single node with ID ""342"" and does not provide enough information to fully address the user's question. Additional data is required to provide a more detailed analysis and recommendations.","[""{\""generated_cypher\"": \""MATCH (n:TelecomNode:physical {node_type: 'Core_Router'}) \\nWHERE n.status = 'Down' \\nRETURN n.name, n.node_id, n.status \\nLIMIT 25\"", \""graph_data_length\"": 1}""]",2.003771
+TC-001,Which physical-layer TelecomNodes with node_type 'Core_Router' currently have status 'Down'?,"The physical-layer Core_Router nodes with status 'Down' can be identified by: MATCH (n:TelecomNode:physical) WHERE n.node_type = 'Core_Router' AND n.status = 'Down' RETURN n.name, n.node_id, n.status. All Core_Router nodes whose status property equals 'Down' are returned.",1,Status Lookup,VectorRAG,"### 1. Incident Summary
+The user has requested information about physical-layer Core_Routers that are currently down. Based on the provided graph context, we have identified one Core_Router with a status of 'Down'. The incident summary is that there is one physical-layer Core_Router, node_id 342, which is currently down.
+
+### 2. Impacted Nodes
+| **Node ID** | **Name** | **Type** | **Layer** | **Status** |
+| --- | --- | --- | --- | --- |
+| 342 | - | Core_Router | Physical | Down |
+
+### 3. Cross-Layer Dependency Analysis
+Insufficient data. The provided graph context only contains physical-layer data and does not include information about logical, service, or business layers.
+
+### 4. Blast Radius & SLA Impact
+Insufficient data. The provided graph context does not contain information about the blast radius, SLA impact, or affected customers.
+
+### 5. Recommended Actions
+1. Investigate the cause of the Core_Router (node_id 342) being down and take corrective action to bring it back online.
+2. Review the network topology to identify potential backup routes or redundant systems that can be used to mitigate the impact of the down Core_Router.
+3. Consider escalating the issue to a vendor or external support team if necessary. 
+
+Note: Retrieved context is limited to the physical layer. Cross-layer impact cannot be determined from the available data.","[""TelecomNode physical Core_Router node_id 342 is currently Down."", ""TelecomNode physical Core_Router node_id 394 is currently up."", ""TelecomNode physical Core_Router node_id 375 is currently up."", ""TelecomNode physical Core_Router node_id 100 is currently up."", ""TelecomNode physical Core_Router node_id 9 is currently up.""]",1.216265
+TC-001,Which physical-layer TelecomNodes with node_type 'Core_Router' currently have status 'Down'?,"The physical-layer Core_Router nodes with status 'Down' can be identified by: MATCH (n:TelecomNode:physical) WHERE n.node_type = 'Core_Router' AND n.status = 'Down' RETURN n.name, n.node_id, n.status. All Core_Router nodes whose status property equals 'Down' are returned.",1,Status Lookup,GraphRAG,"### 1. Incident Summary
+The user has requested information on physical-layer TelecomNodes with node_type 'Core_Router' that are currently down. Based on the provided graph context, there is one Core_Router with a status of 'Down'. This incident may have implications for network reliability and customer service.
+
+### 2. Impacted Nodes
+| Node ID | Name | Type | Layer | Status |
+| --- | --- | --- | --- | --- |
+| 342 |  | Core_Router | physical | Down |
+
+### 3. Cross-Layer Dependency Analysis
+Insufficient data. The provided graph context only contains information about a single physical-layer node and does not include relationships or dependencies to other layers.
+
+### 4. Blast Radius & SLA Impact
+Insufficient data. The graph context does not contain information about the number of impacted nodes per layer, affected customers, or services running in a degraded or down state.
+
+### 5. Recommended Actions
+1. Investigate the cause of the Core_Router (node_id: 342) being down and take corrective action to restore its status to 'Up'.
+2. Review network topology to identify potential backup or redundant paths that can be utilized to minimize the impact of the down Core_Router.
+3. Consider notifying relevant teams or stakeholders about the incident, as the lack of information about affected customers or services does not necessarily mean there is no impact.","[""{\""generated_cypher\"": \""MATCH (n:TelecomNode:physical {node_type: 'Core_Router'}) \\nWHERE n.status = 'Down' \\nRETURN n \\nLIMIT 25\"", \""graph_data_length\"": 1, \""graph_data\"": []}""]",1.563502
+TC-001,Which physical-layer TelecomNodes with node_type 'Core_Router' currently have status 'Down'?,"The physical-layer Core_Router nodes with status 'Down' can be identified by: MATCH (n:TelecomNode:physical) WHERE n.node_type = 'Core_Router' AND n.status = 'Down' RETURN n.name, n.node_id, n.status. All Core_Router nodes whose status property equals 'Down' are returned.",1,Status Lookup,VectorRAG,"### 1. Incident Summary
+The user has requested information about physical-layer TelecomNodes with node_type 'Core_Router' that are currently down. Based on the provided graph context, we have identified one such node. The incident summary is that there is one physical Core_Router node that is currently down.
+
+### 2. Impacted Nodes
+| **Node ID** | **Name** | **Type** | **Layer** | **Status** |
+| --- | --- | --- | --- | --- |
+| 342 | - | Core_Router | Physical | Down |
+
+### 3. Cross-Layer Dependency Analysis
+Insufficient data. The provided graph context only contains physical-layer data and does not include information about logical, service, or business layers.
+
+### 4. Blast Radius & SLA Impact
+Insufficient data. The provided graph context does not contain information about the blast radius, SLA impact, or affected customers.
+
+### 5. Recommended Actions
+1. Investigate the cause of the physical Core_Router node (node_id 342) being down.
+2. Check for any existing maintenance or incident tickets related to this node.
+3. If necessary, escalate the issue to the vendor or a higher-level support team for further assistance.
+4. Consider rerouting traffic to minimize the impact on services, if possible.
+5. Once the issue is resolved, verify that the node is back up and functioning correctly.","[""TelecomNode physical Core_Router node_id 342 is currently Down."", ""TelecomNode physical Core_Router node_id 394 is currently up."", ""TelecomNode physical Core_Router node_id 375 is currently up."", ""TelecomNode physical Core_Router node_id 100 is currently up."", ""TelecomNode physical Core_Router node_id 9 is currently up.""]",1.213798
+TC-001,Which physical-layer TelecomNodes with node_type 'Core_Router' currently have status 'Down'?,"The physical-layer Core_Router nodes with status 'Down' can be identified by: MATCH (n:TelecomNode:physical) WHERE n.node_type = 'Core_Router' AND n.status = 'Down' RETURN n.name, n.node_id, n.status. All Core_Router nodes whose status property equals 'Down' are returned.",1,Status Lookup,GraphRAG,"### 1. Incident Summary
+The user has requested information about physical-layer TelecomNodes with node_type 'Core_Router' that are currently down. Based on the provided graph context, there is one Core_Router with a status of 'Down'. This incident may have implications for network reliability and customer service.
+
+### 2. Impacted Nodes
+| Node ID | Name | Type | Layer | Status |
+| --- | --- | --- | --- | --- |
+| 342 |  | Core_Router | physical | Down |
+
+### 3. Cross-Layer Dependency Analysis
+Insufficient data
+
+### 4. Blast Radius & SLA Impact
+Insufficient data
+
+### 5. Recommended Actions
+1. **Investigate and resolve the issue with Core_Router 342**: As the node is down, it is crucial to identify the root cause and take corrective action to restore its functionality.
+2. **Assess potential impact on logical, service, and business layers**: Although the graph context is limited to the physical layer, it is essential to consider potential cascading effects on higher layers and take proactive measures to mitigate them.
+3. **Retrieve additional graph context**: To gain a better understanding of the situation, it is recommended to retrieve more data from the knowledge graph, including information about logical, service, and business layers, as well as relationships between nodes.","[""{\""generated_cypher\"": \""MATCH (n:TelecomNode:physical {node_type: 'Core_Router'}) \\nWHERE n.status = 'Down' \\nRETURN n \\nLIMIT 25\"", \""graph_data_length\"": 1, \""graph_data\"": [{\""n\"": {\""node_type\"": \""Core_Router\"", \""cpu_utilization\"": \""\"", \""name\"": \""\"", \""sla\"": \""\"", \""layer\"": \""physical\"", \""status\"": \""Down\"", \""node_id\"": \""342\""}}]}""]",1.717632
+TC-001,Which physical-layer TelecomNodes with node_type 'Core_Router' currently have status 'Down'?,"The physical-layer Core_Router nodes with status 'Down' can be identified by: MATCH (n:TelecomNode:physical) WHERE n.node_type = 'Core_Router' AND n.status = 'Down' RETURN n.name, n.node_id, n.status. All Core_Router nodes whose status property equals 'Down' are returned.",1,Status Lookup,VectorRAG,"### 1. Incident Summary
+The user has requested information about physical-layer TelecomNodes with node_type 'Core_Router' that are currently in a 'Down' status. Based on the provided graph context, we have identified one such node. The incident summary is that there is a single Core_Router node that is currently down, which may impact network operations.
+
+### 2. Impacted Nodes
+| Node ID | Name | Type | Layer | Status |
+| --- | --- | --- | --- | --- |
+| 342 | - | Core_Router | Physical | Down |
+
+Note: The name of the impacted node is not provided in the graph context.
+
+### 3. Cross-Layer Dependency Analysis
+Insufficient data. The provided graph context only contains physical-layer data and does not include information about logical, service, or business layers. Therefore, we cannot determine the cross-layer dependencies.
+
+### 4. Blast Radius & SLA Impact
+Insufficient data. The graph context does not provide information about the blast radius, SLA impact, or affected customers.
+
+### 5. Recommended Actions
+1. Investigate the cause of the Core_Router node (node_id 342) being down and take corrective action to bring it back online.
+2. Review network topology to identify potential backup or redundant paths that can be used to mitigate the impact of the down node.
+3. Consider notifying relevant teams or stakeholders about the issue, although specific customer or service impact cannot be determined from the provided data. 
+
+Retrieved context is limited to the physical layer. Cross-layer impact cannot be determined from the available data.","[""TelecomNode physical Core_Router node_id 342 is currently Down."", ""TelecomNode physical Core_Router node_id 394 is currently up."", ""TelecomNode physical Core_Router node_id 375 is currently up."", ""TelecomNode physical Core_Router node_id 100 is currently up."", ""TelecomNode physical Core_Router node_id 9 is currently up.""]",1.757479
