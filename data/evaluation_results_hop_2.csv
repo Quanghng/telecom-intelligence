@@ -112,3 +112,154 @@ Insufficient data. Without information about the logical-layer VirtualRouters an
 3. Assess the potential impact on services and customers due to the degraded state of the physical-layer Edge_Routers and their associated logical-layer VirtualRouters. 
 
 Note: The retrieved context is limited to the physical layer. Cross-layer impact cannot be determined from the available data.","[""TelecomNode physical Edge_Router node_id 383 is currently Degraded."", ""TelecomNode physical Edge_Router node_id 35 is currently Degraded."", ""TelecomNode physical Edge_Router node_id 81 is currently Down."", ""TelecomNode physical Edge_Router node_id 103 is currently up."", ""TelecomNode physical Edge_Router node_id 393 is currently Down.""]",1.332888
+TC-004,Which logical-layer VirtualRouters run on a physical-layer Edge_Router that currently has status 'Degraded'?,"2-hop traversal from logical to physical: MATCH (l:TelecomNode:logical)-[:RUNS_ON]->(p:TelecomNode:physical) WHERE p.node_type = 'Edge_Router' AND p.status = 'Degraded' RETURN l.name, l.node_id, p.name, p.status. This identifies every logical VirtualRouter hosted on a degraded Edge_Router.",2,Dependency Mapping,GraphRAG,"### 1. Incident Summary
+The user is inquiring about the logical-layer VirtualRouters that run on a physical-layer Edge_Router with a status of 'Degraded'. The provided graph context contains information about a physical-layer Edge_Router and a logical-layer VirtualRouter. 
+
+### 2. Impacted Nodes
+| Node ID | Name | Type | Layer | Status |
+| --- | --- | --- | --- | --- |
+| SYNTH-EDGE-001 | Synth-Edge-Router | Edge_Router | physical | Degraded |
+| SYNTH-VR-001 | Synth-Virtual-Router | VirtualRouter | logical | up |
+
+### 3. Cross-Layer Dependency Analysis
+The physical-layer Edge_Router (SYNTH-EDGE-001, Degraded) has a relationship with the logical-layer VirtualRouter (SYNTH-VR-001, up). However, the exact relationship type (e.g., RUNS_ON) is not specified in the provided graph context. Therefore, the analysis is limited by the available data.
+
+### 4. Blast Radius & SLA Impact
+The blast radius includes 1 physical-layer Edge_Router and 1 logical-layer VirtualRouter. Since there are no business-layer Customer nodes in the retrieved data, the SLA impact on customers cannot be determined.
+
+### 5. Recommended Actions
+1. Investigate the cause of the Edge_Router's degraded status and take corrective action to restore it to an operational state.
+2. Monitor the VirtualRouter (SYNTH-VR-001) for any potential issues that may arise due to the Edge_Router's degraded status.
+3. Review the network configuration to determine if there are any redundant or backup systems that can be utilized to minimize the impact of the Edge_Router's degraded status. 
+
+Note: The provided graph context is limited, and some information (e.g., relationship types) is not available. Therefore, the analysis and recommendations are based on the data provided.","[""{\""generated_cypher\"": \""MATCH (l:TelecomNode:logical {node_type: 'VirtualRouter'})-[:RUNS_ON]->(p:TelecomNode:physical {node_type: 'Edge_Router'}) \\nWHERE p.status = 'Degraded' \\nRETURN l, p \\nLIMIT 25\"", \""graph_data_length\"": 3, \""graph_data\"": [{\""l\"": {\""node_type\"": \""VirtualRouter\"", \""cpu_utilization\"": \""40.0\"", \""name\"": \""Synth-Virtual-Router\"", \""sla\"": \""Gold\"", \""layer\"": \""logical\"", \""node_id\"": \""SYNTH-VR-001\"", \""status\"": \""up\""}, \""p\"": {\""node_type\"": \""Edge_Router\"", \""cpu_utilization\"": \""95.0\"", \""name\"": \""Synth-Edge-Router\"", \""sla\"": \""Silver\"", \""layer\"": \""physical\"", \""node_id\"": \""SYNTH-EDGE-001\"", \""status\"": \""Degraded\""}}, {\""l\"": {\""node_type\"": \""VirtualRouter\"", \""cpu_utilization\"": \""40.0\"", \""name\"": \""Synth-Virtual-Router\"", \""sla\"": \""Gold\"", \""layer\"": \""logical\"", \""node_id\"": \""SYNTH-VR-001\"", \""status\"": \""up\""}, \""p\"": {\""node_type\"": \""Edge_Router\"", \""cpu_utilization\"": \""95.0\"", \""name\"": \""Synth-Edge-Router\"", \""sla\"": \""Silver\"", \""layer\"": \""physical\"", \""node_id\"": \""SYNTH-EDGE-001\"", \""status\"": \""Degraded\""}}, {\""l\"": {\""node_type\"": \""VirtualRouter\"", \""cpu_utilization\"": \""40.0\"", \""name\"": \""Synth-Virtual-Router\"", \""sla\"": \""Gold\"", \""layer\"": \""logical\"", \""node_id\"": \""SYNTH-VR-001\"", \""status\"": \""up\""}, \""p\"": {\""node_type\"": \""Edge_Router\"", \""cpu_utilization\"": \""95.0\"", \""name\"": \""Synth-Edge-Router\"", \""sla\"": \""Silver\"", \""layer\"": \""physical\"", \""node_id\"": \""SYNTH-EDGE-001\"", \""status\"": \""Degraded\""}}]}""]",4.835273
+TC-004,Which logical-layer VirtualRouters run on a physical-layer Edge_Router that currently has status 'Degraded'?,"2-hop traversal from logical to physical: MATCH (l:TelecomNode:logical)-[:RUNS_ON]->(p:TelecomNode:physical) WHERE p.node_type = 'Edge_Router' AND p.status = 'Degraded' RETURN l.name, l.node_id, p.name, p.status. This identifies every logical VirtualRouter hosted on a degraded Edge_Router.",2,Dependency Mapping,VectorRAG,"### 1. Incident Summary
+The user is inquiring about logical-layer VirtualRouters that run on physical-layer Edge_Routers with a 'Degraded' status. However, the provided graph context only contains information about physical-layer Edge_Routers and does not include any data about logical-layer VirtualRouters or their relationships to the physical-layer Edge_Routers.
+
+### 2. Impacted Nodes
+Since the graph context does not provide information about logical-layer VirtualRouters, we can only list the physical-layer Edge_Routers that are currently 'Degraded'. 
+
+| Node ID | Name | Type | Layer | Status |
+| --- | --- | --- | --- | --- |
+| 383 | Edge_Router | Edge_Router | Physical | Degraded |
+| 35 | Edge_Router | Edge_Router | Physical | Degraded |
+
+### 3. Cross-Layer Dependency Analysis
+Insufficient data. The graph context does not contain any information about logical-layer VirtualRouters or their relationships to the physical-layer Edge_Routers.
+
+### 4. Blast Radius & SLA Impact
+No data available. The graph context is limited to the physical layer and does not provide any information about logical-layer VirtualRouters, services, or business-layer customers.
+
+### 5. Recommended Actions
+1. Retrieve additional data from the knowledge graph to determine which logical-layer VirtualRouters run on the physical-layer Edge_Routers with a 'Degraded' status.
+2. Analyze the retrieved data to identify potential impacts on services and business-layer customers.
+3. Develop a plan to mitigate any potential impacts on services and business-layer customers.","[""TelecomNode physical Edge_Router node_id 383 is currently Degraded."", ""TelecomNode physical Edge_Router node_id 35 is currently Degraded."", ""TelecomNode physical Edge_Router node_id 81 is currently Down."", ""TelecomNode physical Edge_Router node_id 103 is currently up."", ""TelecomNode physical Edge_Router node_id 393 is currently Down.""]",3.246708
+TC-004,Which logical-layer VirtualRouters run on a physical-layer Edge_Router that currently has status 'Degraded'?,"2-hop traversal from logical to physical: MATCH (l:TelecomNode:logical)-[:RUNS_ON]->(p:TelecomNode:physical) WHERE p.node_type = 'Edge_Router' AND p.status = 'Degraded' RETURN l.name, l.node_id, p.name, p.status. This identifies every logical VirtualRouter hosted on a degraded Edge_Router.",2,Dependency Mapping,GraphRAG,"## Incident Summary
+The user is inquiring about the logical-layer VirtualRouters that run on a physical-layer Edge_Router with a status of 'Degraded'. The provided graph context contains information about a physical-layer Edge_Router with a status of 'Degraded' and its relationship with a logical-layer VirtualRouter.
+
+## Impacted Nodes
+| Node ID | Name | Type | Layer | Status |
+| --- | --- | --- | --- | --- |
+| SYNTH-EDGE-001 | Synth-Edge-Router | Edge_Router | physical | Degraded |
+| SYNTH-VR-001 | Synth-Virtual-Router | VirtualRouter | logical | up |
+
+## Cross-Layer Dependency Analysis
+The physical-layer Edge_Router SYNTH-EDGE-001 (Degraded) has a relationship with the logical-layer VirtualRouter SYNTH-VR-001 (up), where the VirtualRouter runs on the Edge_Router. However, the exact relationship type (e.g., RUNS_ON) is not explicitly stated in the provided graph context.
+
+## Blast Radius & SLA Impact
+The blast radius includes:
+- 1 physical-layer node (SYNTH-EDGE-001)
+- 1 logical-layer node (SYNTH-VR-001)
+No business-layer customers are present in the retrieved data.
+
+## Recommended Actions
+1. Investigate the cause of the physical-layer Edge_Router SYNTH-EDGE-001 being in a 'Degraded' state.
+2. Monitor the logical-layer VirtualRouter SYNTH-VR-001 for potential performance issues due to its dependency on the degraded Edge_Router.
+3. Consider rerouting traffic or taking other mitigating actions to minimize the impact on the network.","[""{\""generated_cypher\"": \""MATCH (l:TelecomNode:logical {node_type: 'VirtualRouter'})-[:RUNS_ON]->(p:TelecomNode:physical {node_type: 'Edge_Router'}) \\nWHERE p.status = 'Degraded' \\nRETURN l, p \\nLIMIT 25\"", \""graph_data_length\"": 3, \""graph_data\"": [{\""l\"": {\""node_type\"": \""VirtualRouter\"", \""cpu_utilization\"": \""40.0\"", \""name\"": \""Synth-Virtual-Router\"", \""sla\"": \""Gold\"", \""layer\"": \""logical\"", \""node_id\"": \""SYNTH-VR-001\"", \""status\"": \""up\""}, \""p\"": {\""node_type\"": \""Edge_Router\"", \""cpu_utilization\"": \""95.0\"", \""name\"": \""Synth-Edge-Router\"", \""sla\"": \""Silver\"", \""layer\"": \""physical\"", \""node_id\"": \""SYNTH-EDGE-001\"", \""status\"": \""Degraded\""}}, {\""l\"": {\""node_type\"": \""VirtualRouter\"", \""cpu_utilization\"": \""40.0\"", \""name\"": \""Synth-Virtual-Router\"", \""sla\"": \""Gold\"", \""layer\"": \""logical\"", \""node_id\"": \""SYNTH-VR-001\"", \""status\"": \""up\""}, \""p\"": {\""node_type\"": \""Edge_Router\"", \""cpu_utilization\"": \""95.0\"", \""name\"": \""Synth-Edge-Router\"", \""sla\"": \""Silver\"", \""layer\"": \""physical\"", \""node_id\"": \""SYNTH-EDGE-001\"", \""status\"": \""Degraded\""}}, {\""l\"": {\""node_type\"": \""VirtualRouter\"", \""cpu_utilization\"": \""40.0\"", \""name\"": \""Synth-Virtual-Router\"", \""sla\"": \""Gold\"", \""layer\"": \""logical\"", \""node_id\"": \""SYNTH-VR-001\"", \""status\"": \""up\""}, \""p\"": {\""node_type\"": \""Edge_Router\"", \""cpu_utilization\"": \""95.0\"", \""name\"": \""Synth-Edge-Router\"", \""sla\"": \""Silver\"", \""layer\"": \""physical\"", \""node_id\"": \""SYNTH-EDGE-001\"", \""status\"": \""Degraded\""}}]}""]",1.805189
+TC-004,Which logical-layer VirtualRouters run on a physical-layer Edge_Router that currently has status 'Degraded'?,"2-hop traversal from logical to physical: MATCH (l:TelecomNode:logical)-[:RUNS_ON]->(p:TelecomNode:physical) WHERE p.node_type = 'Edge_Router' AND p.status = 'Degraded' RETURN l.name, l.node_id, p.name, p.status. This identifies every logical VirtualRouter hosted on a degraded Edge_Router.",2,Dependency Mapping,VectorRAG,"## Incident Summary
+The user is inquiring about logical-layer VirtualRouters that run on physical-layer Edge_Routers with a status of 'Degraded'. However, the provided graph context only contains information about physical-layer Edge_Routers and does not include any data about logical-layer VirtualRouters or their relationships to the physical-layer Edge_Routers.
+
+## Impacted Nodes
+Since the graph context does not provide information about logical-layer VirtualRouters, we can only list the physical-layer Edge_Routers that are currently 'Degraded'.
+
+| Node ID | Name | Type | Layer | Status |
+| --- | --- | --- | --- | --- |
+| 383 | Edge_Router | Edge_Router | Physical | Degraded |
+| 35 | Edge_Router | Edge_Router | Physical | Degraded |
+
+## Cross-Layer Dependency Analysis
+Insufficient data. The graph context does not contain any information about logical-layer VirtualRouters or their relationships to the physical-layer Edge_Routers.
+
+## Blast Radius & SLA Impact
+No data available. The graph context is limited to physical-layer data and does not provide any information about logical-layer VirtualRouters, services, or business-layer customers.
+
+## Recommended Actions
+1. Retrieve additional data from the knowledge graph to determine which logical-layer VirtualRouters run on the physical-layer Edge_Routers with a status of 'Degraded'.
+2. Analyze the dependencies between the physical-layer Edge_Routers and logical-layer VirtualRouters to assess the potential impact on services and customers.
+3. Consider monitoring the physical-layer Edge_Routers and logical-layer VirtualRouters for any changes in status that may affect the overall network performance.","[""TelecomNode physical Edge_Router node_id 383 is currently Degraded."", ""TelecomNode physical Edge_Router node_id 35 is currently Degraded."", ""TelecomNode physical Edge_Router node_id 81 is currently Down."", ""TelecomNode physical Edge_Router node_id 103 is currently up."", ""TelecomNode physical Edge_Router node_id 393 is currently Down.""]",1.148962
+TC-004,Which logical-layer VirtualRouters run on a physical-layer Edge_Router that currently has status 'Degraded'?,"2-hop traversal from logical to physical: MATCH (l:TelecomNode:logical)-[:RUNS_ON]->(p:TelecomNode:physical) WHERE p.node_type = 'Edge_Router' AND p.status = 'Degraded' RETURN l.name, l.node_id, p.name, p.status. This identifies every logical VirtualRouter hosted on a degraded Edge_Router.",2,Dependency Mapping,GraphRAG,"### 1. Direct Answer
+The logical-layer VirtualRouter SYNTH-VR-001 (VirtualRouter) runs on a physical-layer Edge_Router SYNTH-EDGE-001 (Edge_Router, Degraded).
+
+### 2. Impacted Nodes
+| Node ID | Name | Type | Layer | Status |
+| --- | --- | --- | --- | --- |
+| SYNTH-EDGE-001 | Synth-Edge-Router | Edge_Router | Physical | Degraded |
+| SYNTH-VR-001 | Synth-Virtual-Router | VirtualRouter | Logical | up |
+
+### 3. Cross-Layer Dependency Chain
+SYNTH-VR-001 (VirtualRouter, up) ←[RUNS_ON]— SYNTH-EDGE-001 (Edge_Router, Degraded)
+
+### 4. Blast Radius & SLA Impact
+- Total number of impacted nodes per layer: 
+  - Physical: 1
+  - Logical: 1
+- No business-layer customers in retrieved data.
+- The logical-layer VirtualRouter SYNTH-VR-001 is currently up, but runs on a degraded physical-layer Edge_Router SYNTH-EDGE-001.","[""{\""generated_cypher\"": \""MATCH (l:TelecomNode:logical {node_type: 'VirtualRouter'})-[:RUNS_ON]->(p:TelecomNode:physical {node_type: 'Edge_Router'}) \\nWHERE p.status = 'Degraded' \\nRETURN DISTINCT l, p \\nLIMIT 25\"", \""graph_data_length\"": 1, \""graph_data\"": [{\""l\"": {\""node_type\"": \""VirtualRouter\"", \""cpu_utilization\"": \""40.0\"", \""name\"": \""Synth-Virtual-Router\"", \""sla\"": \""Gold\"", \""layer\"": \""logical\"", \""node_id\"": \""SYNTH-VR-001\"", \""status\"": \""up\""}, \""p\"": {\""node_type\"": \""Edge_Router\"", \""cpu_utilization\"": \""95.0\"", \""name\"": \""Synth-Edge-Router\"", \""sla\"": \""Silver\"", \""layer\"": \""physical\"", \""node_id\"": \""SYNTH-EDGE-001\"", \""status\"": \""Degraded\""}}]}""]",2.322835
+TC-004,Which logical-layer VirtualRouters run on a physical-layer Edge_Router that currently has status 'Degraded'?,"2-hop traversal from logical to physical: MATCH (l:TelecomNode:logical)-[:RUNS_ON]->(p:TelecomNode:physical) WHERE p.node_type = 'Edge_Router' AND p.status = 'Degraded' RETURN l.name, l.node_id, p.name, p.status. This identifies every logical VirtualRouter hosted on a degraded Edge_Router.",2,Dependency Mapping,VectorRAG,"### 1. Direct Answer
+No logical-layer VirtualRouters are specified in the provided graph context as running on a physical-layer Edge_Router with a status of 'Degraded'.
+
+### 2. Impacted Nodes
+| Node ID | Name | Type | Layer | Status |
+| --- | --- | --- | --- | --- |
+| 383 |  | Edge_Router | Physical | Degraded |
+| 35 |  | Edge_Router | Physical | Degraded |
+
+### 3. Cross-Layer Dependency Chain
+Insufficient data
+
+### 4. Blast Radius & SLA Impact
+No business-layer customers in retrieved data. The blast radius includes 2 physical-layer Edge_Routers with a status of 'Degraded'. No logical or service-layer nodes are present in the graph context to determine further impact.","[""TelecomNode physical Edge_Router node_id 383 is currently Degraded."", ""TelecomNode physical Edge_Router node_id 35 is currently Degraded."", ""TelecomNode physical Edge_Router node_id 81 is currently Down."", ""TelecomNode physical Edge_Router node_id 103 is currently up."", ""TelecomNode physical Edge_Router node_id 393 is currently Down.""]",0.657688
+TC-004,Which logical-layer VirtualRouters run on a physical-layer Edge_Router that currently has status 'Degraded'?,"2-hop traversal from logical to physical: MATCH (l:TelecomNode:logical)-[:RUNS_ON]->(p:TelecomNode:physical) WHERE p.node_type = 'Edge_Router' AND p.status = 'Degraded' RETURN l.name, l.node_id, p.name, p.status. This identifies every logical VirtualRouter hosted on a degraded Edge_Router.",2,Dependency Mapping,GraphRAG,"### 1. Direct Answer
+The logical-layer VirtualRouter SYNTH-VR-001 (VirtualRouter) runs on the physical-layer Edge_Router SYNTH-EDGE-001 (Edge_Router, Degraded).
+
+### 2. Impacted Nodes
+| Node ID | Name | Type | Layer | Status |
+| --- | --- | --- | --- | --- |
+| SYNTH-EDGE-001 | Synth-Edge-Router | Edge_Router | physical | Degraded |
+| SYNTH-VR-001 | Synth-Virtual-Router | VirtualRouter | logical | up |
+
+### 3. Cross-Layer Dependency Chain
+SYNTH-VR-001 (VirtualRouter, up) ←[RUNS_ON]— SYNTH-EDGE-001 (Edge_Router, Degraded)
+
+### 4. Blast Radius & SLA Impact
+- Total number of impacted nodes per layer: 
+  - Physical: 1
+  - Logical: 1
+- No business-layer customers in retrieved data.
+- The logical-layer VirtualRouter SYNTH-VR-001 is currently up, but runs on a degraded physical-layer Edge_Router SYNTH-EDGE-001.","[""{\""generated_cypher\"": \""MATCH (l:TelecomNode:logical {node_type: 'VirtualRouter'})-[:RUNS_ON]->(p:TelecomNode:physical {node_type: 'Edge_Router'}) \\nWHERE p.status = 'Degraded' \\nRETURN l, p \\nLIMIT 25\"", \""graph_data_length\"": 3, \""graph_data\"": [{\""l\"": {\""node_type\"": \""VirtualRouter\"", \""cpu_utilization\"": \""40.0\"", \""name\"": \""Synth-Virtual-Router\"", \""sla\"": \""Gold\"", \""layer\"": \""logical\"", \""node_id\"": \""SYNTH-VR-001\"", \""status\"": \""up\""}, \""p\"": {\""node_type\"": \""Edge_Router\"", \""cpu_utilization\"": \""95.0\"", \""name\"": \""Synth-Edge-Router\"", \""sla\"": \""Silver\"", \""layer\"": \""physical\"", \""node_id\"": \""SYNTH-EDGE-001\"", \""status\"": \""Degraded\""}}, {\""l\"": {\""node_type\"": \""VirtualRouter\"", \""cpu_utilization\"": \""40.0\"", \""name\"": \""Synth-Virtual-Router\"", \""sla\"": \""Gold\"", \""layer\"": \""logical\"", \""node_id\"": \""SYNTH-VR-001\"", \""status\"": \""up\""}, \""p\"": {\""node_type\"": \""Edge_Router\"", \""cpu_utilization\"": \""95.0\"", \""name\"": \""Synth-Edge-Router\"", \""sla\"": \""Silver\"", \""layer\"": \""physical\"", \""node_id\"": \""SYNTH-EDGE-001\"", \""status\"": \""Degraded\""}}, {\""l\"": {\""node_type\"": \""VirtualRouter\"", \""cpu_utilization\"": \""40.0\"", \""name\"": \""Synth-Virtual-Router\"", \""sla\"": \""Gold\"", \""layer\"": \""logical\"", \""node_id\"": \""SYNTH-VR-001\"", \""status\"": \""up\""}, \""p\"": {\""node_type\"": \""Edge_Router\"", \""cpu_utilization\"": \""95.0\"", \""name\"": \""Synth-Edge-Router\"", \""sla\"": \""Silver\"", \""layer\"": \""physical\"", \""node_id\"": \""SYNTH-EDGE-001\"", \""status\"": \""Degraded\""}}]}""]",1.240981
+TC-004,Which logical-layer VirtualRouters run on a physical-layer Edge_Router that currently has status 'Degraded'?,"2-hop traversal from logical to physical: MATCH (l:TelecomNode:logical)-[:RUNS_ON]->(p:TelecomNode:physical) WHERE p.node_type = 'Edge_Router' AND p.status = 'Degraded' RETURN l.name, l.node_id, p.name, p.status. This identifies every logical VirtualRouter hosted on a degraded Edge_Router.",2,Dependency Mapping,VectorRAG,"### 1. Direct Answer
+No logical-layer VirtualRouters are identified in the graph context as running on a physical-layer Edge_Router with a status of 'Degraded'.
+
+### 2. Impacted Nodes
+| Node ID | Name | Type | Layer | Status |
+| --- | --- | --- | --- | --- |
+| 383 | Edge_Router | Edge_Router | Physical | Degraded |
+| 35 | Edge_Router | Edge_Router | Physical | Degraded |
+
+### 3. Cross-Layer Dependency Chain
+Insufficient data
+
+### 4. Blast Radius & SLA Impact
+No business-layer customers in retrieved data. 
+No service-layer nodes in retrieved data.
+Total number of impacted physical-layer nodes: 2 (both are Edge_Routers with status 'Degraded').","[""TelecomNode physical Edge_Router node_id 383 is currently Degraded."", ""TelecomNode physical Edge_Router node_id 35 is currently Degraded."", ""TelecomNode physical Edge_Router node_id 81 is currently Down."", ""TelecomNode physical Edge_Router node_id 103 is currently up."", ""TelecomNode physical Edge_Router node_id 393 is currently Down.""]",0.768183

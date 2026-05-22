@@ -1,6 +1,7 @@
 """
 Integration test script for the Phase 3 GraphRAG pipeline.
 Tests the full flow: Query → Cypher Generation → Graph Retrieval → Synthesis Report.
+Uses the LangGraph StateGraph orchestrator with Neo4j feedback loop.
 """
 
 import os
@@ -10,8 +11,6 @@ from dotenv import load_dotenv
 from openai import OpenAI
 
 from src.database.connection import Neo4jConnection
-from src.llm.cypher_agent import CypherGenerationAgent
-from src.llm.summary_agent import SynthesisAgent
 from src.core.orchestrator import GraphRAGOrchestrator
 
 
@@ -24,10 +23,16 @@ def main():
     logger = logging.getLogger(__name__)
 
     load_dotenv()
-    api_key = os.getenv("LLM_API_KEY")
+    api_key = os.getenv("HF_TOKEN")
     if not api_key:
         raise ValueError(
-            "LLM_API_KEY is missing. Set it in your .env file or environment."
+            "HF_TOKEN is missing. Set it in your .env file or environment."
+        )
+
+    openai_api_key = os.getenv("OPENAI_API_KEY")
+    if not openai_api_key:
+        raise ValueError(
+            "OPENAI_API_KEY is missing. Set it in your .env file or environment."
         )
 
     client = OpenAI(
@@ -37,8 +42,6 @@ def main():
 
     # ── Initialization ───────────────────────────────────────────────────
     hf_model = "Qwen/Qwen2.5-7B-Instruct"
-    cypher_agent = CypherGenerationAgent(client=client, model=hf_model, temperature=0.0)
-    synthesis_agent = SynthesisAgent(client=client, model=hf_model, temperature=0.3)
 
     # ── Test Execution ───────────────────────────────────────────────────
     test_query = (
@@ -54,8 +57,11 @@ def main():
         with Neo4jConnection() as conn:
             orchestrator = GraphRAGOrchestrator(
                 connection=conn,
-                cypher_agent=cypher_agent,
-                synthesis_agent=synthesis_agent,
+                llm_client=client,
+                openai_api_key=openai_api_key,
+                model=hf_model,
+                temperature=0.0,
+                k=3,
             )
             result = orchestrator.run_pipeline(test_query)
 

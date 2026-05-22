@@ -28,13 +28,14 @@ from __future__ import annotations
 import os
 import argparse
 import logging
+
+from dotenv import load_dotenv
 import sys
 from pathlib import Path
 from pydantic import SecretStr
 
 import pandas as pd
-from langchain_community.embeddings import HuggingFaceEmbeddings
-from langchain_openai import ChatOpenAI
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from openai import OpenAI
 
 from config.settings import llm_settings
@@ -44,7 +45,6 @@ from src.database.connection import Neo4jConnection
 from src.evaluation.metrics_calculator import RagasEvaluator
 from src.evaluation.runner import EvaluationRunner
 from src.evaluation.seed_data import get_thesis_test_cases
-from src.llm.cypher_agent import CypherGenerationAgent
 from src.llm.summary_agent import SynthesisAgent
 
 # -- Constants ----------------------------------------------------------------
@@ -94,6 +94,7 @@ def _configure_logging() -> None:
 
 def main() -> None:
     """Execute the full Telecom Operational Intelligence evaluation pipeline."""
+    load_dotenv()
     _configure_logging()
 
     # ==================================================================
@@ -139,21 +140,24 @@ def main() -> None:
         os.environ["HF_TOKEN"] = llm_settings.hf_token.get_secret_value()
         logger.debug("Hugging Face token securely injected into environment.")
 
+    # -- OpenAI API key for embeddings and RAGAS judge -------------------
+    openai_api_key = os.getenv("OPENAI_API_KEY", "")
+
     # -- LangChain-compatible LLM (judge model for RAGAS) ----------------
-    logger.info("Initialising LangChain ChatOpenAI (HuggingFace serverless) …")
+    logger.info("Initialising LangChain ChatOpenAI (OpenAI GPT-4o as RAGAS judge) …")
     evaluator_llm = ChatOpenAI(
-        model=_HF_MODEL,
-        api_key=api_key_secret,
-        base_url=_HF_BASE_URL,
+        model="gpt-4o",
+        api_key=SecretStr(openai_api_key),
         temperature=0.0,
-        max_retries=2,
+        max_retries=3,
         timeout=120,
     )
 
     # -- LangChain-compatible Embeddings (for RAGAS semantic metrics) ----
-    logger.info("Initialising HuggingFaceEmbeddings (%s) …", _EMBEDDING_MODEL)
-    evaluator_embeddings = HuggingFaceEmbeddings(
-        model_name=_EMBEDDING_MODEL,
+    logger.info("Initialising OpenAI Embeddings (text-embedding-3-small) for RAGAS …")
+    evaluator_embeddings = OpenAIEmbeddings(
+        model="text-embedding-3-small",
+        api_key=openai_api_key,
     )
 
     # -- Raw OpenAI client for pipeline agents (CypherAgent / Synthesis) -
@@ -163,7 +167,6 @@ def main() -> None:
         api_key=api_key,
     )
 
-    cypher_agent = CypherGenerationAgent(client=openai_client, model=_HF_MODEL)
     synthesis_agent = SynthesisAgent(client=openai_client, model=_HF_MODEL)
 
     # -- Neo4j connection & GraphRAG orchestrator ------------------------
@@ -174,8 +177,12 @@ def main() -> None:
     try:
       orchestrator = GraphRAGOrchestrator(
           connection=neo4j_conn,
-          cypher_agent=cypher_agent,
+          llm_client=openai_client,
+          openai_api_key=openai_api_key,
           synthesis_agent=synthesis_agent,
+          model=_HF_MODEL,
+          temperature=0.0,
+          k=3,
       )
 
       # -- Vector RAG retriever ----------------------------------------

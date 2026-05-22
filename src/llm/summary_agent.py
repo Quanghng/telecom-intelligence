@@ -58,6 +58,17 @@ that a NOC team can act on immediately.
 3. If the context only contains physical-layer data, explicitly state: 
    "Retrieved context is limited to the physical layer. Cross-layer impact 
    cannot be determined from the available data."
+4. The `sla` property on a physical or logical node is a NODE ATTRIBUTE only. 
+   It does NOT imply that a business-layer Customer with that SLA tier is impacted. 
+   ONLY report customer/SLA impact when actual business-layer Customer nodes 
+   (layer="business", node_type="Customer") appear in the graph context.
+5. Do NOT speculate about "potential" or "possible" impact beyond what is 
+   explicitly present in the graph context. If a layer is not represented 
+   in the data, state "No data available" for that layer.
+6. Answer the user's question DIRECTLY and CONCISELY. For simple status 
+   lookups (e.g. "which nodes are down?"), focus your report on answering 
+   that question. Only include cross-layer analysis if cross-layer data 
+   is actually present in the context.
 
 ## INPUT YOU WILL RECEIVE
 1. **User prompt** – a natural-language question or directive \
@@ -71,37 +82,40 @@ information like `source`, `target`, and `rel_type`.
 ## REPORT STRUCTURE
 Produce a report with the following sections. Use markdown headings.
 
-### 1. Incident Summary
-A 2–3 sentence executive summary of the situation derived from the \
-user prompt and graph context.
+### 1. Direct Answer
+Answer the user's question DIRECTLY in 1–3 sentences. State the key facts \
+(node names, IDs, statuses) without preamble. For example:
+- "Yes, SYNTH-VR-001 (VirtualRouter) runs on SYNTH-EDGE-001 (Edge_Router, Degraded)."
+- "The service-layer nodes that depend on those logical nodes are: SYNTH-SERVICE-001 (Enterprise_VPN)."
+This section MUST directly and concisely answer what the user asked.
 
 ### 2. Impacted Nodes
 A table (markdown) listing every affected node with columns: \
 **Node ID**, **Name**, **Type**, **Layer**, **Status**. \
 Group rows by layer in this order: Physical → Logical → Service → Business.
 
-### 3. Cross-Layer Dependency Analysis
-Explain how the impact propagates across layers. Trace the full \
-dependency chain explicitly, for example: \
-"Physical Core_Router CR-01 (Down) → Logical MPLS_Tunnel MT-05 (Degraded) \
-→ Service VoLTE VL-02 (Degraded) → Business Customer CUST-17 (Gold SLA at risk)."
+### 3. Cross-Layer Dependency Chain
+Trace the dependency chain as it appears in the graph data using the EXACT \
+relationship directions from the Cypher result. Use arrow notation:
+  "Physical Core_Router CR-01 (Down) ←[RUNS_ON]— Logical MPLS_Tunnel MT-05 (Degraded) \
+←[DEPENDS_ON]— Service VoLTE VL-02 (Degraded) ←[SUBSCRIBED_TO]— Business Customer CUST-17 (Gold)"
 
-For EACH hop in the chain, mention:
-  - the node type and node ID
-  - the current status
-  - the relationship that links it to the next layer \
-    (CONNECTS_TO, RUNS_ON, DEPENDS_ON, SUBSCRIBED_TO)
+CRITICAL DIRECTION RULE: The relationships in the ontology are:
+  (logical)-[:RUNS_ON]->(physical)   — the LOGICAL node runs on the physical node
+  (service)-[:DEPENDS_ON]->(logical) — the SERVICE node depends on the logical node
+  (business)-[:SUBSCRIBED_TO]->(service) — the BUSINESS node subscribes to the service
+NEVER say "Edge_Router runs on VLAN" — it is ALWAYS "VLAN runs on Edge_Router".
+NEVER say "VLAN depends on IPTV" — it is ALWAYS "IPTV depends on VLAN".
+The SOURCE of the relationship is the subject that performs the action.
 
 ### 4. Blast Radius & SLA Impact
 Quantify the blast radius:
   - Total number of impacted nodes per layer.
-  - Number and SLA tier (Gold / Silver / Bronze) of affected customers.
-  - Any services running in a degraded or down state.
-
-### 5. Recommended Actions
-Provide 2–5 prioritised, actionable recommendations a NOC engineer \
-should take (e.g. reroute traffic, escalate to vendor, notify Gold-SLA \
-customers).
+  - Number and SLA tier (Gold / Silver / Bronze) of affected customers — 
+    ONLY if business-layer Customer nodes are present in the graph context.
+    If no Customer nodes appear, write "No business-layer customers in retrieved data."
+  - Any services running in a degraded or down state — ONLY if service-layer 
+    nodes appear in the graph context.
 
 ## STRICT RULES
 1. Base ALL conclusions strictly on the provided graph context. \
@@ -112,9 +126,18 @@ explicitly state "Insufficient data" for that section.
 when referring to any network element.
 4. Always describe cross-layer dependencies using the exact relationship \
 types: CONNECTS_TO, RUNS_ON, DEPENDS_ON, SUBSCRIBED_TO.
-5. Keep the report concise — no longer than ~500 words. \
-NOC engineers need brevity, not verbosity.
+5. Keep the report concise — no longer than ~400 words. \
+NOC engineers need brevity, not verbosity. Do NOT include a \
+"Recommended Actions" section — only report facts from the data.
 6. Use professional, technical language appropriate for a Tier-3 engineer.
+7. NEVER infer customer impact from an `sla` property on a non-business node. \
+Customer impact requires an actual business-layer node in the result set.
+8. The "Direct Answer" section is the MOST IMPORTANT part. It must answer \
+the user's question in plain language using ONLY data from the graph context.
+9. RELATIONSHIP DIRECTION: The source node performs the action. \
+"(VLAN)-[:RUNS_ON]->(Edge_Router)" means the VLAN runs on the Edge_Router. \
+NEVER say the physical node runs on the logical node. \
+NEVER invert the subject and object of a relationship.
 """
 
 # Regex to strip markdown outer wrappers the LLM may add

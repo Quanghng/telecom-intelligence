@@ -146,7 +146,7 @@ class DataExporter:
             Path to the JSON file.
         """
         json_path: Path = self.output_dir / "graph.json"
-        data: Dict[str, Any] = dict(nx.node_link_data(graph, link="links"))
+        data: Dict[str, Any] = dict(nx.node_link_data(graph, edges="links"))
         with open(json_path, "w", encoding="utf-8") as fh:
             json.dump(data, fh, indent=2, default=str)
         return json_path

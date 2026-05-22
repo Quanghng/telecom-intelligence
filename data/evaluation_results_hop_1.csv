@@ -231,3 +231,122 @@ Insufficient data. The graph context does not provide information about the blas
 3. Consider notifying relevant teams or stakeholders about the issue, although specific customer or service impact cannot be determined from the provided data. 
 
 Retrieved context is limited to the physical layer. Cross-layer impact cannot be determined from the available data.","[""TelecomNode physical Core_Router node_id 342 is currently Down."", ""TelecomNode physical Core_Router node_id 394 is currently up."", ""TelecomNode physical Core_Router node_id 375 is currently up."", ""TelecomNode physical Core_Router node_id 100 is currently up."", ""TelecomNode physical Core_Router node_id 9 is currently up.""]",1.757479
+TC-001,Which physical-layer TelecomNodes with node_type 'Core_Router' currently have status 'Down'?,"The physical-layer Core_Router nodes with status 'Down' can be identified by: MATCH (n:TelecomNode:physical) WHERE n.node_type = 'Core_Router' AND n.status = 'Down' RETURN n.name, n.node_id, n.status. All Core_Router nodes whose status property equals 'Down' are returned.",1,Status Lookup,GraphRAG,"### 1. Incident Summary
+The incident involves multiple physical-layer Core_Routers that are currently down. The affected nodes have been identified, and their status is critical. This report aims to provide a concise overview of the impacted nodes and recommend actions to mitigate the issue.
+
+### 2. Impacted Nodes
+| Node ID | Name | Type | Layer | Status |
+| --- | --- | --- | --- | --- |
+| 342 |  | Core_Router | physical | Down |
+| SYNTH-CORE-001 | Synth-Core-Router-Failed | Core_Router | physical | Down |
+| SYNTH-H4-CORE-999 | H4-Failed-Core | Core_Router | physical | Down |
+
+### 3. Cross-Layer Dependency Analysis
+Insufficient data
+
+### 4. Blast Radius & SLA Impact
+The blast radius includes 3 physical-layer Core_Routers. Two customers with Gold and Silver SLA tiers are potentially impacted. However, without cross-layer dependency information, the exact services and customers affected cannot be determined.
+
+### 5. Recommended Actions
+1. **Escalate to vendor**: Immediately notify the vendor for the affected Core_Routers (node_id: 342, SYNTH-CORE-001, SYNTH-H4-CORE-999) to expedite repairs or replacements.
+2. **Reroute traffic**: Attempt to reroute traffic through alternative physical-layer Core_Routers to minimize the impact on services and customers.
+3. **Notify affected customers**: Inform customers with Gold (SYNTH-H4-CORE-999) and Silver (SYNTH-CORE-001) SLA tiers about the potential disruption to their services and provide regular updates on the status of the incident.","[""{\""generated_cypher\"": \""MATCH (n:TelecomNode:physical {node_type: 'Core_Router'}) \\nWHERE n.status = 'Down' \\nRETURN n \\nLIMIT 25\"", \""graph_data_length\"": 3, \""graph_data\"": [{\""n\"": {\""node_type\"": \""Core_Router\"", \""cpu_utilization\"": \""\"", \""name\"": \""\"", \""sla\"": \""\"", \""layer\"": \""physical\"", \""status\"": \""Down\"", \""node_id\"": \""342\""}}, {\""n\"": {\""node_type\"": \""Core_Router\"", \""cpu_utilization\"": \""0.0\"", \""name\"": \""Synth-Core-Router-Failed\"", \""sla\"": \""Silver\"", \""layer\"": \""physical\"", \""status\"": \""Down\"", \""node_id\"": \""SYNTH-CORE-001\""}}, {\""n\"": {\""node_type\"": \""Core_Router\"", \""cpu_utilization\"": \""0.0\"", \""name\"": \""H4-Failed-Core\"", \""sla\"": \""Gold\"", \""layer\"": \""physical\"", \""status\"": \""Down\"", \""node_id\"": \""SYNTH-H4-CORE-999\""}}]}""]",2.793432
+TC-001,Which physical-layer TelecomNodes with node_type 'Core_Router' currently have status 'Down'?,"The physical-layer Core_Router nodes with status 'Down' can be identified by: MATCH (n:TelecomNode:physical) WHERE n.node_type = 'Core_Router' AND n.status = 'Down' RETURN n.name, n.node_id, n.status. All Core_Router nodes whose status property equals 'Down' are returned.",1,Status Lookup,VectorRAG,"### 1. Incident Summary
+The user has requested a list of physical-layer TelecomNodes with node_type 'Core_Router' that are currently down. Based on the provided graph context, we have identified one such node. The incident summary is that there is one physical Core_Router node that is currently down.
+
+### 2. Impacted Nodes
+| Node ID | Name | Type | Layer | Status |
+| --- | --- | --- | --- | --- |
+| 342 | - | Core_Router | Physical | Down |
+
+### 3. Cross-Layer Dependency Analysis
+Insufficient data. The provided graph context only contains physical-layer data and does not provide information about logical, service, or business layers.
+
+### 4. Blast Radius & SLA Impact
+Insufficient data. The provided graph context does not contain information about the blast radius, SLA impact, or affected customers.
+
+### 5. Recommended Actions
+1. Investigate the cause of the physical Core_Router node 342 being down.
+2. Check for any alarms or error messages related to node 342.
+3. Consider escalating the issue to a vendor or a higher-level support team if necessary.
+4. Review the network topology to identify potential backup or redundant paths that can be used to minimize the impact of the down node.
+5. Monitor the node's status and update the incident report accordingly. 
+
+Note: The retrieved context is limited to the physical layer. Cross-layer impact cannot be determined from the available data.","[""TelecomNode physical Core_Router node_id 342 is currently Down."", ""TelecomNode physical Core_Router node_id 394 is currently up."", ""TelecomNode physical Core_Router node_id 375 is currently up."", ""TelecomNode physical Core_Router node_id 100 is currently up."", ""TelecomNode physical Core_Router node_id 9 is currently up.""]",3.096765
+TC-001,Which physical-layer TelecomNodes with node_type 'Core_Router' currently have status 'Down'?,"The physical-layer Core_Router nodes with status 'Down' can be identified by: MATCH (n:TelecomNode:physical) WHERE n.node_type = 'Core_Router' AND n.status = 'Down' RETURN n.name, n.node_id, n.status. All Core_Router nodes whose status property equals 'Down' are returned.",1,Status Lookup,GraphRAG,"### 1. Incident Summary
+The current incident involves multiple physical-layer Core_Routers that are down. The affected nodes are identified as having a node_type of 'Core_Router' and a status of 'Down'. 
+
+### 2. Impacted Nodes
+| **Node ID** | **Name** | **Type** | **Layer** | **Status** |
+| --- | --- | --- | --- | --- |
+| 342 |  | Core_Router | physical | Down |
+| SYNTH-CORE-001 | Synth-Core-Router-Failed | Core_Router | physical | Down |
+| SYNTH-H4-CORE-999 | H4-Failed-Core | Core_Router | physical | Down |
+
+### 3. Cross-Layer Dependency Analysis
+Insufficient data. The provided graph context only contains physical-layer data. Cross-layer impact cannot be determined from the available data.
+
+### 4. Blast Radius & SLA Impact
+The blast radius includes 3 physical-layer Core_Routers. No business-layer customers are in the retrieved data. 
+
+### 5. Recommended Actions
+1. **Immediate Notification**: Notify the operations team about the down Core_Routers to initiate troubleshooting and repair.
+2. **Traffic Rerouting**: Reroute traffic from the affected Core_Routers to other available routers to minimize service disruption.
+3. **Root Cause Analysis**: Perform a root cause analysis to identify the reason for the Core_Routers being down and implement measures to prevent similar incidents in the future.","[""{\""generated_cypher\"": \""MATCH (n:TelecomNode:physical {node_type: 'Core_Router'}) \\nWHERE n.status = 'Down' \\nRETURN n \\nLIMIT 25\"", \""graph_data_length\"": 3, \""graph_data\"": [{\""n\"": {\""node_type\"": \""Core_Router\"", \""cpu_utilization\"": \""\"", \""name\"": \""\"", \""sla\"": \""\"", \""layer\"": \""physical\"", \""status\"": \""Down\"", \""node_id\"": \""342\""}}, {\""n\"": {\""node_type\"": \""Core_Router\"", \""cpu_utilization\"": \""0.0\"", \""name\"": \""Synth-Core-Router-Failed\"", \""sla\"": \""Silver\"", \""layer\"": \""physical\"", \""status\"": \""Down\"", \""node_id\"": \""SYNTH-CORE-001\""}}, {\""n\"": {\""node_type\"": \""Core_Router\"", \""cpu_utilization\"": \""0.0\"", \""name\"": \""H4-Failed-Core\"", \""sla\"": \""Gold\"", \""layer\"": \""physical\"", \""status\"": \""Down\"", \""node_id\"": \""SYNTH-H4-CORE-999\""}}]}""]",2.816747
+TC-001,Which physical-layer TelecomNodes with node_type 'Core_Router' currently have status 'Down'?,"The physical-layer Core_Router nodes with status 'Down' can be identified by: MATCH (n:TelecomNode:physical) WHERE n.node_type = 'Core_Router' AND n.status = 'Down' RETURN n.name, n.node_id, n.status. All Core_Router nodes whose status property equals 'Down' are returned.",1,Status Lookup,VectorRAG,"### 1. Incident Summary
+The user has requested a list of physical-layer Core_Routers that are currently down. Based on the provided graph context, we have identified one Core_Router that meets this condition.
+
+### 2. Impacted Nodes
+| **Node ID** | **Name** | **Type** | **Layer** | **Status** |
+| --- | --- | --- | --- | --- |
+| 342 | - | Core_Router | Physical | Down |
+
+### 3. Cross-Layer Dependency Analysis
+Insufficient data. The provided graph context only contains physical-layer data and does not include relationships or nodes from other layers.
+
+### 4. Blast Radius & SLA Impact
+The blast radius includes 1 physical-layer Core_Router. No business-layer customers or service-layer nodes are present in the retrieved data.
+
+### 5. Recommended Actions
+1. Investigate the cause of Core_Router node_id 342 being down.
+2. Check for any existing maintenance or outage notifications related to this node.
+3. Consider rerouting traffic to minimize the impact of the down Core_Router. 
+
+Note: The retrieved context is limited to the physical layer. Cross-layer impact cannot be determined from the available data.","[""TelecomNode physical Core_Router node_id 342 is currently Down."", ""TelecomNode physical Core_Router node_id 394 is currently up."", ""TelecomNode physical Core_Router node_id 375 is currently up."", ""TelecomNode physical Core_Router node_id 100 is currently up."", ""TelecomNode physical Core_Router node_id 9 is currently up.""]",1.230703
+TC-001,Which physical-layer TelecomNodes with node_type 'Core_Router' currently have status 'Down'?,"The physical-layer Core_Router nodes with status 'Down' can be identified by: MATCH (n:TelecomNode:physical) WHERE n.node_type = 'Core_Router' AND n.status = 'Down' RETURN n.name, n.node_id, n.status. All Core_Router nodes whose status property equals 'Down' are returned.",1,Status Lookup,GraphRAG,"### 1. Direct Answer
+The physical-layer TelecomNodes with node_type 'Core_Router' that are currently down are: 
+- Node ID: 342, 
+- Node ID: SYNTH-CORE-001, 
+- Node ID: SYNTH-H4-CORE-999.
+
+### 2. Impacted Nodes
+| Node ID | Name | Type | Layer | Status |
+| --- | --- | --- | --- | --- |
+| 342 |  | Core_Router | physical | Down |
+| SYNTH-CORE-001 | Synth-Core-Router-Failed | Core_Router | physical | Down |
+| SYNTH-H4-CORE-999 | H4-Failed-Core | Core_Router | physical | Down |
+
+### 3. Cross-Layer Dependency Chain
+Insufficient data
+
+### 4. Blast Radius & SLA Impact
+The blast radius includes 3 physical-layer nodes. 
+No business-layer customers are in the retrieved data. 
+No service-layer nodes are in the retrieved data. 
+The impacted physical-layer Core_Routers have the following SLA tiers: 
+- One with unspecified SLA (Node ID: 342), 
+- One with Silver SLA (Node ID: SYNTH-CORE-001), 
+- One with Gold SLA (Node ID: SYNTH-H4-CORE-999).","[""{\""generated_cypher\"": \""MATCH (n:TelecomNode:physical {node_type: 'Core_Router'}) \\nWHERE n.status = 'Down' \\nRETURN n \\nLIMIT 25\"", \""graph_data_length\"": 3, \""graph_data\"": [{\""n\"": {\""node_type\"": \""Core_Router\"", \""cpu_utilization\"": \""\"", \""name\"": \""\"", \""sla\"": \""\"", \""layer\"": \""physical\"", \""status\"": \""Down\"", \""node_id\"": \""342\""}}, {\""n\"": {\""node_type\"": \""Core_Router\"", \""cpu_utilization\"": \""0.0\"", \""name\"": \""Synth-Core-Router-Failed\"", \""sla\"": \""Silver\"", \""layer\"": \""physical\"", \""status\"": \""Down\"", \""node_id\"": \""SYNTH-CORE-001\""}}, {\""n\"": {\""node_type\"": \""Core_Router\"", \""cpu_utilization\"": \""0.0\"", \""name\"": \""H4-Failed-Core\"", \""sla\"": \""Gold\"", \""layer\"": \""physical\"", \""status\"": \""Down\"", \""node_id\"": \""SYNTH-H4-CORE-999\""}}]}""]",1.971647
+TC-001,Which physical-layer TelecomNodes with node_type 'Core_Router' currently have status 'Down'?,"The physical-layer Core_Router nodes with status 'Down' can be identified by: MATCH (n:TelecomNode:physical) WHERE n.node_type = 'Core_Router' AND n.status = 'Down' RETURN n.name, n.node_id, n.status. All Core_Router nodes whose status property equals 'Down' are returned.",1,Status Lookup,VectorRAG,"### 1. Direct Answer
+The physical-layer TelecomNode with node_type 'Core_Router' that is currently 'Down' is node_id 342.
+
+### 2. Impacted Nodes
+| Node ID | Name | Type | Layer | Status |
+| --- | --- | --- | --- | --- |
+| 342 |  | Core_Router | Physical | Down |
+
+### 3. Cross-Layer Dependency Chain
+Insufficient data
+
+### 4. Blast Radius & SLA Impact
+The blast radius includes 1 physical-layer node. No business-layer customers or service-layer nodes are present in the retrieved data.","[""TelecomNode physical Core_Router node_id 342 is currently Down."", ""TelecomNode physical Core_Router node_id 394 is currently up."", ""TelecomNode physical Core_Router node_id 375 is currently up."", ""TelecomNode physical Core_Router node_id 100 is currently up."", ""TelecomNode physical Core_Router node_id 9 is currently up.""]",0.648204
