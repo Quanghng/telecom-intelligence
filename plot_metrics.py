@@ -49,7 +49,7 @@ def _plot_pair(ax, gr, vr, label_gr="GraphRAG", label_vr="VectorRAG"):
                     where=[g < v for g, v in zip(gr, vr)],
                     alpha=ALPHA, color=RED, interpolate=True)
 
-# ── Figure layout: 2 rows × 3 cols (last cell = latency spanning 2 cols) ───
+# ── Figure layout: 2 rows × 3 cols (all cells equal size) ─────────────────
 fig = plt.figure(figsize=(16, 10))
 gs  = fig.add_gridspec(2, 3, hspace=0.45, wspace=0.35)
 
@@ -57,7 +57,8 @@ ax_faith  = fig.add_subplot(gs[0, 0])
 ax_rel    = fig.add_subplot(gs[0, 1])
 ax_prec   = fig.add_subplot(gs[0, 2])
 ax_rec    = fig.add_subplot(gs[1, 0])
-ax_lat    = fig.add_subplot(gs[1, 1:])   # spans columns 1 & 2
+ax_lat    = fig.add_subplot(gs[1, 1])
+ax_sum    = fig.add_subplot(gs[1, 2])
 
 # ── Plot each metric ─────────────────────────────────────────────────────────
 _plot_pair(ax_faith, graphrag_faithfulness,  vectorrag_faithfulness)
@@ -104,10 +105,11 @@ summary = (
     f"  Precision    : {np.mean(vectorrag_precision):.3f}\n"
     f"  Recall       : {np.mean(vectorrag_recall):.3f}"
 )
-ax_lat.text(
-    1.03, 0.97, summary,
-    transform=ax_lat.transAxes,
-    fontsize=7.5, verticalalignment="top",
+ax_sum.axis("off")
+ax_sum.text(
+    0.5, 0.97, summary,
+    transform=ax_sum.transAxes,
+    fontsize=7.5, verticalalignment="top", horizontalalignment="center",
     bbox=dict(boxstyle="round,pad=0.5", facecolor="white",
               edgecolor="grey", alpha=0.85),
 )
