@@ -1,0 +1,8 @@
+# ============================================================
+# telecom-intelligence · Frontend dependencies
+# ============================================================
+# Install with:  pip install -r requirements_frontend.txt
+
+streamlit>=1.34.0
+streamlit-agraph>=0.0.45
+pandas>=2.0
